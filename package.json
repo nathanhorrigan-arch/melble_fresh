@@ -2,6 +2,7 @@
   "name": "melble",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://nathanhorrigan-arch.github.io/melble_fresh",
   "engines": {
     "node": "24.x"
   },
