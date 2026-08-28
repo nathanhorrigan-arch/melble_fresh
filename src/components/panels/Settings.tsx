@@ -30,25 +30,6 @@ export function Settings({
       <div className="my-4 flex flex-col gap-2">
         <div className="flex p-1">
           <select
-            id="setting-theme"
-            className="h-8 dark:bg-slate-800 w-16 p-1"
-            value={settingsData.theme}
-            onChange={(e) =>
-              updateSettings({ theme: e.target.value as "light" | "dark" })
-            }
-          >
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-          <label
-            className="flex-1 ml-2 flex items-center"
-            htmlFor="setting-theme"
-          >
-            {t("settings.theme")}
-          </label>
-        </div>
-        <div className="flex p-1">
-          <select
             id="setting-language"
             className="h-8 dark:bg-slate-800 w-16 p-1"
             value={i18n.language}

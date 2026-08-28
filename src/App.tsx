@@ -7,21 +7,34 @@ import { Settings } from "./components/panels/Settings";
 import { useSettings } from "./hooks/useSettings";
 import { Stats } from "./components/panels/Stats";
 import Twemoji from "./components/Twemoji";
+import { Profile } from "./components/panels/Profile";
+import { loadProgress, PlayerProgress } from "./domain/progress";
+
+export type GameMode = "daily" | "practice" | "challenge";
 
 export default function App() {
   const [infoOpen, setInfoOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [progress, setProgress] = useState<PlayerProgress>(() =>
+    loadProgress()
+  );
+  const challengeSeed = new URLSearchParams(window.location.search).get(
+    "challenge"
+  );
+  const [gameMode, setGameMode] = useState<GameMode>(
+    challengeSeed ? "challenge" : "daily"
+  );
+  const [practiceRound, setPracticeRound] = useState(() =>
+    Number(localStorage.getItem("melble-practice-round") || "1")
+  );
 
   const [settingsData, updateSettings] = useSettings();
 
   useEffect(() => {
-    if (settingsData.theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [settingsData.theme]);
+    document.documentElement.classList.add("dark");
+  }, []);
 
   return (
     <>
@@ -29,7 +42,7 @@ export default function App() {
         hideProgressBar
         position="top-center"
         transition={Flip}
-        theme={settingsData.theme}
+        theme="dark"
         autoClose={2000}
         bodyClassName="font-bold text-center"
         toastClassName="flex justify-center m-2 max-w-full"
@@ -47,9 +60,19 @@ export default function App() {
         updateSettings={updateSettings}
       />
       <Stats isOpen={statsOpen} close={() => setStatsOpen(false)} />
-      <div className="flex justify-center flex-auto dark:bg-slate-900 dark:text-slate-50">
-        <div className="w-full max-w-lg flex flex-col">
-          <header className="border-b-2 px-3 border-gray-200 flex">
+      <Profile
+        isOpen={profileOpen}
+        close={() => setProfileOpen(false)}
+        progress={progress}
+        onChange={setProgress}
+      />
+      <div className="cafe-world flex justify-center flex-auto text-stone-100">
+        <div className="cafe-window" aria-hidden="true">
+          <div className="pixel-rain" />
+          <div className="tram">96</div>
+        </div>
+        <div className="w-full max-w-xl flex flex-col cafe-game-shell">
+          <header className="cafe-header px-3 flex items-center">
             <button
               className="mr-3 text-xl"
               type="button"
@@ -57,10 +80,17 @@ export default function App() {
             >
               <Twemoji text="❓" />
             </button>
-            <h1 className="text-4xl font-bold uppercase tracking-wide text-center my-1 flex-auto">
-              Me<span className="text-green-600">l</span>b
-              <span className="text-green-600">l</span>e
+            <h1 className="pixel-title text-center my-2 flex-auto">
+              ME<span>l</span>B<span>l</span>E
             </h1>
+            <button
+              className="ml-3 text-xl"
+              type="button"
+              onClick={() => setProfileOpen(true)}
+              aria-label="Player card"
+            >
+              <Twemoji text="☕" />
+            </button>
             <button
               className="ml-3 text-xl"
               type="button"
@@ -76,7 +106,47 @@ export default function App() {
               <Twemoji text="⚙️" />
             </button>
           </header>
-          <Game settingsData={settingsData} updateSettings={updateSettings} />
+          <nav className="mode-switcher" aria-label="Game mode">
+            <button
+              className={gameMode === "daily" ? "active" : ""}
+              onClick={() => setGameMode("daily")}
+            >
+              Daily
+            </button>
+            <button
+              className={gameMode === "practice" ? "active" : ""}
+              onClick={() => setGameMode("practice")}
+            >
+              Practice
+            </button>
+            {challengeSeed && (
+              <button
+                className={gameMode === "challenge" ? "active" : ""}
+                onClick={() => setGameMode("challenge")}
+              >
+                Challenge
+              </button>
+            )}
+          </nav>
+          <Game
+            settingsData={settingsData}
+            updateSettings={updateSettings}
+            gameMode={gameMode}
+            practiceRound={practiceRound}
+            challengeSeed={challengeSeed || undefined}
+            onProgress={setProgress}
+            onNextPractice={() => {
+              const next = practiceRound + 1;
+              localStorage.setItem("melble-practice-round", String(next));
+              setPracticeRound(next);
+            }}
+          />
+          <div className="cafe-table-edge" aria-hidden="true">
+            <span className="coffee-cup">☕</span>
+            <span className="table-note">
+              MELBOURNE · 8 BIT · ONE MORE ROUND
+            </span>
+          </div>
         </div>
       </div>
     </>

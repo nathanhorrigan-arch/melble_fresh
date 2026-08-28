@@ -39,9 +39,12 @@ export function Share({
       ? " 🌀"
       : "";
     const bestPercent = `(${bestGuessPercent(guesses).toString()}%)`;
-    const title = `#melble #${dayCount(
-      dayString
-    )} ${guessCount}/6 ${bestPercent}${difficultyModifierEmoji}`;
+    const gameLabel = dayString.startsWith("practice-")
+      ? "Practice"
+      : dayString.startsWith("challenge-")
+      ? "Friend challenge"
+      : `#${dayCount(dayString)}`;
+    const title = `#melble ${gameLabel} ${guessCount}/6 ${bestPercent}${difficultyModifierEmoji}`;
 
     const guessString = guesses
       .map((guess) => {
@@ -52,7 +55,11 @@ export function Share({
       })
       .join("\n");
 
-    return [title, guessString, "https://melble.azzola.dev"].join("\n");
+    return [
+      title,
+      guessString,
+      "https://nathanhorrigan-arch.github.io/melble_fresh/",
+    ].join("\n");
   }, [dayString, guesses, hideImageMode, rotationMode, theme]);
 
   return (
@@ -63,9 +70,7 @@ export function Share({
         format: "text/plain",
       }}
     >
-      <button className="rounded font-bold border-2 p-1 uppercase bg-green-600 hover:bg-green-500 active:bg-green-700 text-white w-full">
-        {t("share")}
-      </button>
+      <button className="cafe-button w-full">{t("share")}</button>
     </CopyToClipboard>
   );
 }

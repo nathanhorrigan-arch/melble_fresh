@@ -44,11 +44,11 @@ export function SuburbInput({
         </div>
       )}
       containerProps={{
-        className: "border-2 rounded flex-auto relative",
+        className: "border-2 border-amber-700 rounded flex-auto relative",
       }}
       inputProps={{
         ref: inputRef,
-        className: "w-full dark:bg-slate-800 dark:text-slate-100 p-1",
+        className: "w-full bg-stone-950 text-stone-100 p-2 outline-none",
         placeholder: t("placeholder"),
         value: currentGuess,
         onChange: (_e, { newValue }) => setCurrentGuess(newValue),
