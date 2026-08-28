@@ -40,15 +40,15 @@ describe("game scoring", () => {
     expect(getGameScore([guess(0)])).toBe(100);
   });
 
-  it("awards tiered points for an incorrect answer within one kilometre", () => {
-    expect(getGameScore([guess(200)])).toBe(75);
-    expect(getGameScore([guess(400)])).toBe(50);
-    expect(getGameScore([guess(900)])).toBe(25);
-    expect(getGameScore([guess(1_001)])).toBe(0);
+  it("awards tiered points for an incorrect answer within five kilometres", () => {
+    expect(getGameScore([guess(1_000)])).toBe(75);
+    expect(getGameScore([guess(3_000)])).toBe(50);
+    expect(getGameScore([guess(5_000)])).toBe(25);
+    expect(getGameScore([guess(5_001)])).toBe(0);
   });
 
   it("deducts ten points for every clue", () => {
-    expect(getGameScore([guess(400)], 2)).toBe(30);
+    expect(getGameScore([guess(2_000)], 2)).toBe(30);
     expect(getGameScore([guess(0)], 3)).toBe(70);
   });
 });

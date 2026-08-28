@@ -35,8 +35,8 @@ production website, and publishes it automatically. GitHub Pages must use
 
 - **Daily** gives every player the same suburb each day.
 - **Practice** offers repeatable games that do not replace the daily puzzle.
-- Correct answers score 100 points. Unsolved games score 75 points within 250
-  metres, 50 within 500 metres, or 25 within one kilometre.
+- Correct answers score 100 points. Unsolved games score 75 points within one
+  kilometre, 50 within three kilometres, or 25 within five kilometres.
 - Barista clues cost 10 points each.
 - Player names, points, close calls, and achievements are currently stored on
   the player's device.

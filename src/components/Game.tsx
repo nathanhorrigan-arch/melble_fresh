@@ -61,6 +61,7 @@ export function Game({
   );
 
   const [currentGuess, setCurrentGuess] = useState("");
+  const [showWinCelebration, setShowWinCelebration] = useState(false);
   const [revealedClues, setRevealedClues] = useState<number[]>(() => {
     const stored = localStorage.getItem(`clues-${dayString}`);
     return stored ? JSON.parse(stored) : [];
@@ -85,6 +86,12 @@ export function Game({
     const stored = localStorage.getItem(`clues-${dayString}`);
     setRevealedClues(stored ? JSON.parse(stored) : []);
   }, [dayString]);
+
+  useEffect(() => {
+    if (!showWinCelebration) return;
+    const timeout = window.setTimeout(() => setShowWinCelebration(false), 2600);
+    return () => window.clearTimeout(timeout);
+  }, [showWinCelebration]);
 
   useEffect(() => {
     if (gameEnded && guesses.length > 0) {
@@ -157,6 +164,7 @@ export function Game({
     setCurrentGuess("");
 
     if (newGuess.distance === 0) {
+      setShowWinCelebration(true);
       toast.success(t("welldone"), { delay: 2000 });
 
       const level = dayCount(dayString);
@@ -197,6 +205,15 @@ export function Game({
 
   return (
     <div className="flex-grow flex flex-col mx-3 sm:mx-5">
+      {showWinCelebration && (
+        <div className="win-celebration" role="status" aria-live="polite">
+          <img
+            src={`${process.env.PUBLIC_URL}/images/cafe/melburb-win-cup.png`}
+            alt="8-bit coffee cup sparkling in celebration"
+          />
+          <strong>PERFECT POUR!</strong>
+        </div>
+      )}
       <div className="game-status">
         <div>
           <span className="status-label">MODE</span>
@@ -376,6 +393,14 @@ export function Game({
                   options={{ className: "inline-block" }}
                 />
               </a>
+              <a
+                className="underline text-center block mt-4 whitespace-nowrap"
+                href={getBroadsheetSuburbUrl(suburbName)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ☕ Find cafés
+              </a>
             </div>
             {ENABLE_TWITCH_LINK && (
               <div className="flex flex-wrap gap-4 justify-center">
@@ -418,4 +443,15 @@ export function Game({
       </div>
     </div>
   );
+}
+
+function getBroadsheetSuburbUrl(suburbName: string): string {
+  const slug = suburbName
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[’']/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  return `https://www.broadsheet.com.au/melbourne/${slug}`;
 }

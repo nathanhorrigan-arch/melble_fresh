@@ -50,7 +50,7 @@ export function recordCompletedGame(
   const score = getGameScore(guesses, clueCount);
   const won = guesses.some((guess) => guess.distance === 0);
   const bestDistance = Math.min(...guesses.map((guess) => guess.distance));
-  const closeCall = !won && bestDistance <= 1000;
+  const closeCall = !won && bestDistance <= 5000;
   const completedGames = current.completedGames + 1;
   const achievements = new Set(current.achievements);
 
