@@ -109,9 +109,9 @@ export default function App() {
               alt="An 8-bit barista making coffee at a Melbourne café"
             />
             <div className="barista-banner-copy">
-              <span>NOW SERVING</span>
-              <strong>ONE FRESH SUBURB</strong>
-              <small>WITH EVERY CUP</small>
+              <span>FRESHLY BREWED</span>
+              <strong>ONE MELBOURNE SUBURB</strong>
+              <small>CAN YOU NAME IT?</small>
             </div>
           </section>
           <nav className="mode-switcher" aria-label="Game mode">

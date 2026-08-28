@@ -31,7 +31,7 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
           An exact answer is worth 100 points. If you do not solve the suburb,
           your closest guess can still earn 75 points within 1 km, 50 within 3
           km, or 25 within 5 km. Guesses farther than 5 km earn no distance
-          points. Barista clues cost 10 points each.
+          points. Barista clues deduct 10 points each.
         </div>
         <div>
           Play the shared Daily puzzle, practise as often as you like, or send a
