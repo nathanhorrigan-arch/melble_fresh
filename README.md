@@ -2,6 +2,26 @@
 
 Play the Melble game here: https://melble.azzola.dev!
 
+## Development
+
+Development requires Node.js 24 LTS.
+
+Install dependencies and start the local development server:
+
+```sh
+npm ci
+npm start
+```
+
+Before submitting a change, run the same baseline checks used for the
+application:
+
+```sh
+npm run typecheck
+npm run test:ci
+npm run build
+```
+
 ## Resources used:
 
 - Suburb list: https://www.jetpunk.com/user-quizzes/150455/melbourne-suburbs/stats
