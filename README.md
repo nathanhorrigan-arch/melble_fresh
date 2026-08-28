@@ -1,6 +1,6 @@
-# ME**L**B**L**E
+# ME**L**BU**R**B
 
-Play the Melble game here: https://melble.azzola.dev!
+Play MelBurb here: <https://nathanhorrigan-arch.github.io/melble_fresh/>.
 
 ## Development
 

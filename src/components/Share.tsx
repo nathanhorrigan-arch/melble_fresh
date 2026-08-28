@@ -44,7 +44,7 @@ export function Share({
       : dayString.startsWith("challenge-")
       ? "Friend challenge"
       : `#${dayCount(dayString)}`;
-    const title = `#melble ${gameLabel} ${guessCount}/6 ${bestPercent}${difficultyModifierEmoji}`;
+    const title = `#melburb ${gameLabel} ${guessCount}/6 ${bestPercent}${difficultyModifierEmoji}`;
 
     const guessString = guesses
       .map((guess) => {
