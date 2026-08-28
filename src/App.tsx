@@ -68,39 +68,40 @@ export default function App() {
       />
       <div className="cafe-world flex justify-center flex-auto text-stone-100">
         <div className="w-full flex flex-col cafe-game-shell">
-          <header className="cafe-header px-3 flex items-center">
-            <button
-              className="mr-3 text-xl"
-              type="button"
-              onClick={() => setInfoOpen(true)}
-            >
-              <Twemoji text="❓" />
-            </button>
-            <h1 className="pixel-title text-center my-2 flex-auto">
+          <header className="cafe-header px-3">
+            <h1 className="pixel-title text-center my-2">
               ME<span>L</span>BU<span>R</span>B
             </h1>
-            <button
-              className="ml-3 text-xl"
-              type="button"
-              onClick={() => setProfileOpen(true)}
-              aria-label="Player card"
-            >
-              <Twemoji text="☕" />
-            </button>
-            <button
-              className="ml-3 text-xl"
-              type="button"
-              onClick={() => setStatsOpen(true)}
-            >
-              <Twemoji text="📈" />
-            </button>
-            <button
-              className="ml-3 text-xl"
-              type="button"
-              onClick={() => setSettingsOpen(true)}
-            >
-              <Twemoji text="⚙️" />
-            </button>
+            <div className="header-actions">
+              <button
+                type="button"
+                onClick={() => setInfoOpen(true)}
+                aria-label="How to play"
+              >
+                <Twemoji text="❓" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setProfileOpen(true)}
+                aria-label="Player card"
+              >
+                <Twemoji text="☕" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatsOpen(true)}
+                aria-label="Statistics"
+              >
+                <Twemoji text="📈" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setSettingsOpen(true)}
+                aria-label="Settings"
+              >
+                <Twemoji text="⚙️" />
+              </button>
+            </div>
           </header>
           <section className="barista-banner" aria-label="MelBurb café barista">
             <img

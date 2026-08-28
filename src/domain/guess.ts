@@ -17,11 +17,11 @@ export function getGameScore(guesses: Guess[], clueCount = 0): number {
     Number.POSITIVE_INFINITY
   );
   const proximityScore =
-    bestDistance <= 250
+    bestDistance <= 1000
       ? 75
-      : bestDistance <= 500
+      : bestDistance <= 3000
       ? 50
-      : bestDistance <= 1000
+      : bestDistance <= 5000
       ? 25
       : 0;
   return Math.max(0, proximityScore - cluePenalty);

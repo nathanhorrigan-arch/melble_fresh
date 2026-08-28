@@ -29,8 +29,9 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
         </div>
         <div>
           An exact answer is worth 100 points. If you do not solve the suburb,
-          your closest guess can still earn 75 points within 250 m, 50 within
-          500 m, or 25 within 1 km. Barista clues cost 10 points each.
+          your closest guess can still earn 75 points within 1 km, 50 within 3
+          km, or 25 within 5 km. Guesses farther than 5 km earn no distance
+          points. Barista clues cost 10 points each.
         </div>
         <div>
           Play the shared Daily puzzle, practise as often as you like, or send a
@@ -93,72 +94,6 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
             it&apos;s the location to guess! Congrats!{" "}
             <Twemoji text="🎉" options={{ className: "inline-block" }} />
           </div>
-        </div>
-      </div>
-      <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3 font-bold">
-        A new <MelBurb /> will be available every day, and Practice mode is
-        always open!
-      </div>
-      <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
-        <MelBurb /> is a fork of{" "}
-        <a
-          className="underline"
-          href="https://worldle.teuteuf.fr/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Worldle
-        </a>
-        , which was <span className="font-bold">heavily</span> inspired by{" "}
-        <a
-          className="underline"
-          href="https://www.powerlanguage.co.uk/wordle/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Wordle
-        </a>{" "}
-        created by{" "}
-        <a
-          className="underline"
-          href="https://twitter.com/powerlanguish"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Josh Wardle (@powerlanguish)
-        </a>
-        .
-      </div>
-      <div className="space-y-3 text-justify pb-3">
-        <div>
-          MelBurb variant made by{" "}
-          <a
-            className="underline"
-            href="https://twitter.com/lucasazzola"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @lucasazzola
-          </a>
-          . Originally made by{" "}
-          <a
-            className="underline"
-            href="https://twitter.com/teuteuf"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @teuteuf
-          </a>{" "}
-          - (
-          <a
-            className="underline"
-            href="https://github.com/azz/melble/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            source code
-          </a>
-          )
         </div>
       </div>
     </Panel>
