@@ -1,4 +1,4 @@
-import { loadAllGuesses, saveGuesses } from "./guess";
+import { getGameScore, loadAllGuesses, saveGuesses } from "./guess";
 
 describe("guess persistence", () => {
   beforeEach(() => localStorage.clear());
@@ -26,5 +26,29 @@ describe("guess persistence", () => {
       "2026-08-27": [firstGuess],
       "2026-08-28": [secondGuess],
     });
+  });
+});
+
+describe("game scoring", () => {
+  const guess = (distance: number) => ({
+    name: "Test suburb",
+    distance,
+    direction: "N" as const,
+  });
+
+  it("awards 100 points for an exact answer", () => {
+    expect(getGameScore([guess(0)])).toBe(100);
+  });
+
+  it("awards tiered points for an incorrect answer within one kilometre", () => {
+    expect(getGameScore([guess(200)])).toBe(75);
+    expect(getGameScore([guess(400)])).toBe(50);
+    expect(getGameScore([guess(900)])).toBe(25);
+    expect(getGameScore([guess(1_001)])).toBe(0);
+  });
+
+  it("deducts ten points for every clue", () => {
+    expect(getGameScore([guess(400)], 2)).toBe(30);
+    expect(getGameScore([guess(0)], 3)).toBe(70);
   });
 });

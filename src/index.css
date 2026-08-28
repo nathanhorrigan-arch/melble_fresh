@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root {
+html,
+body,
+#root {
   min-height: 100%;
   flex: 1 1 auto;
   display: flex;
@@ -11,14 +13,268 @@ html, body, #root {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root {
+  color-scheme: dark;
+  --espresso: #0c0908;
+  --charcoal: #171311;
+  --crema: #f3dfb3;
+  --amber: #f5b942;
+  --gumleaf: #65a276;
+  --brick: #713b2b;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.cafe-world {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  background: linear-gradient(rgba(12, 9, 8, 0.84), rgba(12, 9, 8, 0.96)),
+    repeating-linear-gradient(90deg, #301a15 0 28px, #1d100d 28px 31px);
+}
+
+.cafe-window {
+  position: fixed;
+  top: 8vh;
+  left: max(2vw, calc(50vw - 470px));
+  width: 190px;
+  height: 310px;
+  border: 10px solid #38221a;
+  box-shadow: inset 0 0 0 4px #0b0908;
+  background: linear-gradient(#263949 0 64%, #181310 64%);
+  opacity: 0.85;
+}
+
+.pixel-rain {
+  height: 64%;
+  background: repeating-linear-gradient(
+    105deg,
+    transparent 0 15px,
+    rgba(176, 213, 228, 0.45) 16px 18px,
+    transparent 19px 31px
+  );
+}
+
+.tram {
+  position: absolute;
+  bottom: 26px;
+  left: 18px;
+  width: 150px;
+  height: 58px;
+  padding: 7px;
+  border: 5px solid #102016;
+  background: #4d8b5d;
+  color: #fff2c9;
+  font-weight: 900;
+  box-shadow: inset 0 -13px #315f3d;
+}
+
+.cafe-game-shell {
+  z-index: 1;
+  min-height: 100vh;
+  background: rgba(12, 9, 8, 0.94);
+  border-left: 2px solid #3b2a22;
+  border-right: 2px solid #3b2a22;
+  box-shadow: 0 0 70px #000;
+}
+
+.cafe-header {
+  border-bottom: 4px solid var(--brick);
+  background: #0a0807;
+}
+
+.pixel-title {
+  font-size: 2.25rem;
+  line-height: 1;
+  font-weight: 1000;
+  letter-spacing: 0.16em;
+  color: var(--crema);
+  text-shadow: 3px 3px 0 #6d3325;
+}
+
+.pixel-title span {
+  color: var(--gumleaf);
+}
+
+.mode-switcher {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  padding: 10px 12px 4px;
+}
+
+.mode-switcher button {
+  padding: 9px;
+  border: 2px solid #5e493d;
+  color: #b9aa98;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mode-switcher button.active {
+  color: #111;
+  background: var(--amber);
+  border-color: var(--amber);
+}
+
+.game-status {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 8px 0 12px;
+}
+
+.game-status > div {
+  border: 2px solid #594138;
+  padding: 7px 5px;
+  text-align: center;
+  background: #15100e;
+}
+
+.game-status strong,
+.game-status span {
+  display: block;
+}
+.game-status strong {
+  color: var(--crema);
+  font-size: 0.8rem;
+}
+.status-label {
+  color: var(--gumleaf);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+}
+
+.clue-board {
+  margin-top: 12px;
+  border: 2px dashed #735941;
+  background: #15110d;
+  padding: 10px;
+}
+
+.clue-board h2 {
+  color: var(--amber);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+.clue-board span {
+  color: #9f8b79;
+  font-size: 0.65rem;
+}
+.clue-board button {
+  min-height: 48px;
+  border: 1px solid #765b49;
+  padding: 5px;
+  color: #d8c8b4;
+  font-size: 0.7rem;
+}
+.clue-board button.revealed {
+  background: #263d2d;
+  color: #e7f1de;
+  border-color: var(--gumleaf);
+}
+
+.cafe-button {
+  border: 2px solid var(--amber);
+  background: #1c1511;
+  color: var(--crema);
+  padding: 8px 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.cafe-button:hover {
+  background: var(--amber);
+  color: #111;
+}
+
+.score-ticket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 12px 0;
+  padding: 14px;
+  border: 3px dashed #14100d;
+  background: var(--crema);
+  color: #241710;
+  transform: rotate(-0.6deg);
+  box-shadow: 4px 5px 0 #5f3627;
+}
+.score-ticket span {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+}
+.score-ticket strong {
+  font-size: 1.6rem;
+}
+.score-ticket small {
+  text-align: center;
+  max-width: 360px;
+}
+
+.achievement-chip {
+  border: 1px solid #6c503d;
+  background: #201713;
+  color: var(--crema);
+  padding: 6px 8px;
+  font-size: 0.75rem;
+}
+
+.cafe-table-edge {
+  margin-top: auto;
+  min-height: 64px;
+  padding: 14px 20px;
+  border-top: 5px solid #74422d;
+  background: repeating-linear-gradient(
+    90deg,
+    #48291e 0 42px,
+    #523022 42px 44px
+  );
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.coffee-cup {
+  font-size: 1.8rem;
+  filter: grayscale(0.25);
+}
+.table-note {
+  color: #cba677;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+}
+
+@media (max-width: 920px) {
+  .cafe-window {
+    display: none;
+  }
+}
+@media (max-width: 430px) {
+  .pixel-title {
+    font-size: 1.85rem;
+  }
+  .game-status strong {
+    font-size: 0.7rem;
+  }
+  .table-note {
+    display: none;
+  }
+}
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }

@@ -13,6 +13,9 @@ import Twemoji from "./Twemoji";
 import { suburbs } from "../domain/suburbs.position";
 import { event } from "../domain/analytics";
 import { bestGuessPercent, dayCount } from "../domain/guessStats";
+import type { GameMode } from "../App";
+import { getGameScore } from "../domain/guess";
+import { PlayerProgress, recordCompletedGame } from "../domain/progress";
 
 const ENABLE_TWITCH_LINK = false;
 const MAX_TRY_COUNT = 6;
@@ -20,14 +23,33 @@ const MAX_TRY_COUNT = 6;
 interface GameProps {
   settingsData: SettingsData;
   updateSettings: (newSettings: Partial<SettingsData>) => void;
+  gameMode: GameMode;
+  practiceRound: number;
+  challengeSeed?: string;
+  onNextPractice: () => void;
+  onProgress: (progress: PlayerProgress) => void;
 }
 
-export function Game({ settingsData, updateSettings }: GameProps) {
+export function Game({
+  settingsData,
+  updateSettings,
+  gameMode,
+  practiceRound,
+  challengeSeed,
+  onNextPractice,
+  onProgress,
+}: GameProps) {
   const { t, i18n } = useTranslation();
-  const dayString = useMemo(
+  const dailyKey = useMemo(
     () => getDayString(settingsData.shiftDayCount),
     [settingsData.shiftDayCount]
   );
+  const dayString =
+    gameMode === "practice"
+      ? `practice-${practiceRound}`
+      : gameMode === "challenge"
+      ? `challenge-${challengeSeed}`
+      : dailyKey;
 
   const suburbInputRef = useRef<HTMLInputElement>(null);
 
@@ -39,6 +61,10 @@ export function Game({ settingsData, updateSettings }: GameProps) {
   );
 
   const [currentGuess, setCurrentGuess] = useState("");
+  const [revealedClues, setRevealedClues] = useState<number[]>(() => {
+    const stored = localStorage.getItem(`clues-${dayString}`);
+    return stored ? JSON.parse(stored) : [];
+  });
   const [hideImageMode, setHideImageMode] = useMode(
     "hideImageMode",
     dayString,
@@ -53,6 +79,48 @@ export function Game({ settingsData, updateSettings }: GameProps) {
   const gameEnded =
     guesses.length === MAX_TRY_COUNT ||
     guesses[guesses.length - 1]?.distance === 0;
+  const gameScore = getGameScore(guesses, revealedClues.length);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(`clues-${dayString}`);
+    setRevealedClues(stored ? JSON.parse(stored) : []);
+  }, [dayString]);
+
+  useEffect(() => {
+    if (gameEnded && guesses.length > 0) {
+      onProgress(recordCompletedGame(dayString, guesses, revealedClues.length));
+    }
+  }, [dayString, gameEnded, guesses, onProgress, revealedClues.length]);
+
+  const revealClue = (index: number) => {
+    if (revealedClues.includes(index)) return;
+    const next = [...revealedClues, index];
+    localStorage.setItem(`clues-${dayString}`, JSON.stringify(next));
+    setRevealedClues(next);
+  };
+
+  const clueText = useMemo(() => {
+    if (!suburbName || !suburb) return [];
+    const cbdDistance = Math.round(
+      geolib.getDistance(suburb, { latitude: -37.8136, longitude: 144.9631 }) /
+        1000
+    );
+    return [
+      `Starts with “${suburbName.charAt(0).toUpperCase()}”`,
+      `${suburbName.replace(/[^a-z]/gi, "").length} letters`,
+      `About ${cbdDistance} km from the CBD`,
+    ];
+  }, [suburb, suburbName]);
+
+  const copyChallenge = async () => {
+    const seed =
+      gameMode === "challenge" ? challengeSeed || dailyKey : dayString;
+    const url = `${window.location.origin}${
+      window.location.pathname
+    }?challenge=${encodeURIComponent(seed)}`;
+    await navigator.clipboard.writeText(url);
+    toast.success("Challenge link copied!");
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (suburb == null) {
@@ -128,7 +196,27 @@ export function Game({ settingsData, updateSettings }: GameProps) {
   }, [todays, dayString, i18n.resolvedLanguage]);
 
   return (
-    <div className="flex-grow flex flex-col mx-2">
+    <div className="flex-grow flex flex-col mx-3 sm:mx-5">
+      <div className="game-status">
+        <div>
+          <span className="status-label">MODE</span>
+          <strong>{gameMode.toUpperCase()}</strong>
+        </div>
+        <div>
+          <span className="status-label">TABLE</span>
+          <strong>
+            {gameMode === "daily"
+              ? `#${dayCount(dailyKey)}`
+              : gameMode === "practice"
+              ? practiceRound
+              : "FRIEND"}
+          </strong>
+        </div>
+        <div>
+          <span className="status-label">POT</span>
+          <strong>{Math.max(25, 100 - revealedClues.length * 10)} PTS</strong>
+        </div>
+      </div>
       {hideImageMode && !gameEnded && (
         <button
           className="font-bold border-2 p-1 rounded uppercase my-2 hover:bg-gray-50 active:bg-gray-100 dark:hover:bg-slate-800 dark:active:bg-slate-700"
@@ -200,9 +288,46 @@ export function Game({ settingsData, updateSettings }: GameProps) {
         settingsData={settingsData}
         suburbInputRef={suburbInputRef}
       />
+      {!gameEnded && suburb && (
+        <section className="clue-board">
+          <div className="flex items-center justify-between mb-2">
+            <h2>BARISTA CLUES</h2>
+            <span>-10 points each</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {clueText.map((clue, index) => (
+              <button
+                key={clue}
+                type="button"
+                onClick={() => revealClue(index)}
+                className={revealedClues.includes(index) ? "revealed" : ""}
+              >
+                {revealedClues.includes(index) ? clue : `Clue ${index + 1}`}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
       <div className="my-2">
         {gameEnded && suburb ? (
           <>
+            <div className="score-ticket">
+              <span>
+                {guesses.some((guess) => guess.distance === 0)
+                  ? "SUBURB FOUND"
+                  : gameScore
+                  ? "CLOSE CALL"
+                  : "NEXT COFFEE'S ON US"}
+              </span>
+              <strong>+{gameScore} POINTS</strong>
+              {!guesses.some((guess) => guess.distance === 0) &&
+                gameScore > 0 && (
+                  <small>
+                    Distance points awarded because the suburb was not guessed
+                    exactly.
+                  </small>
+                )}
+            </div>
             <Share
               guesses={guesses}
               dayString={dayString}
@@ -210,6 +335,24 @@ export function Game({ settingsData, updateSettings }: GameProps) {
               hideImageMode={hideImageMode}
               rotationMode={rotationMode}
             />
+            <div className="flex gap-2 mt-3">
+              <button
+                type="button"
+                className="cafe-button flex-1"
+                onClick={copyChallenge}
+              >
+                Challenge a friend
+              </button>
+              {gameMode === "practice" && (
+                <button
+                  type="button"
+                  className="cafe-button flex-1"
+                  onClick={onNextPractice}
+                >
+                  Next practice
+                </button>
+              )}
+            </div>
             <div className="flex flex-wrap gap-4 justify-center">
               <a
                 className="underline text-center block mt-4 whitespace-nowrap"

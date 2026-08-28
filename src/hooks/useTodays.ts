@@ -64,7 +64,16 @@ export function useTodays(dayString: string): [
   return [todays, addGuess, randomAngle, imageScale];
 }
 
-function getSuburb(dayString: string) {
+function getSuburb(dayString: string): Suburb {
+  if (dayString.startsWith("challenge-")) {
+    return getSuburb(dayString.slice("challenge-".length));
+  }
+  if (dayString.startsWith("practice-")) {
+    const index = Math.floor(
+      seedrandom.alea(dayString)() * suburbsWithImage.length
+    );
+    return suburbsWithImage[index];
+  }
   const currentDayDate = DateTime.fromFormat(dayString, "yyyy-MM-dd");
   let pickingDate = DateTime.fromFormat("2022-03-21", "yyyy-MM-dd");
   let pickedSuburb: Suburb | null = null;

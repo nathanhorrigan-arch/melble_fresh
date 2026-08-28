@@ -27,6 +27,15 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
           After each guess, you will have the distance, the direction and the
           proximity from your guess to the target location.
         </div>
+        <div>
+          An exact answer is worth 100 points. If you do not solve the suburb,
+          your closest guess can still earn 75 points within 250 m, 50 within
+          500 m, or 25 within 1 km. Barista clues cost 10 points each.
+        </div>
+        <div>
+          Play the shared Daily puzzle, practise as often as you like, or send a
+          finished puzzle to a friend as a challenge.
+        </div>
       </div>
       <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
         <div className="font-bold">Examples</div>
@@ -87,7 +96,8 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
         </div>
       </div>
       <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3 font-bold">
-        A new <Melble /> will be available every day!
+        A new <Melble /> will be available every day, and Practice mode is
+        always open!
       </div>
       <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
         <Melble /> is a fork of{" "}

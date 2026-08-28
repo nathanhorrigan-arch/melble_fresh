@@ -12,9 +12,7 @@ export interface SettingsData {
 const defaultSettingsData: SettingsData = {
   noImageMode: false,
   rotationMode: false,
-  theme: window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light",
+  theme: "dark",
   shiftDayCount: 0,
   allowShiftingDay: false,
   updateNotificationDisabled: false,
