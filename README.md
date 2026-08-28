@@ -22,6 +22,15 @@ npm run test:ci
 npm run build
 ```
 
+## Publishing
+
+The website is published with GitHub Pages at
+<https://nathanhorrigan-arch.github.io/melble_fresh/>.
+
+When a change is merged into `main`, GitHub Actions checks the code, builds the
+production website, and publishes it automatically. GitHub Pages must use
+**GitHub Actions** as its publishing source in the repository settings.
+
 ## Resources used:
 
 - Suburb list: https://www.jetpunk.com/user-quizzes/150455/melbourne-suburbs/stats
