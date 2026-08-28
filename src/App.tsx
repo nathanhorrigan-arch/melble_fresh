@@ -67,7 +67,7 @@ export default function App() {
         onChange={setProgress}
       />
       <div className="cafe-world flex justify-center flex-auto text-stone-100">
-        <div className="w-full max-w-xl flex flex-col cafe-game-shell">
+        <div className="w-full flex flex-col cafe-game-shell">
           <header className="cafe-header px-3 flex items-center">
             <button
               className="mr-3 text-xl"
@@ -77,7 +77,7 @@ export default function App() {
               <Twemoji text="❓" />
             </button>
             <h1 className="pixel-title text-center my-2 flex-auto">
-              ME<span>l</span>B<span>l</span>E
+              ME<span>L</span>BU<span>R</span>B
             </h1>
             <button
               className="ml-3 text-xl"
@@ -102,6 +102,17 @@ export default function App() {
               <Twemoji text="⚙️" />
             </button>
           </header>
+          <section className="barista-banner" aria-label="MelBurb café barista">
+            <img
+              src={`${process.env.PUBLIC_URL}/images/cafe/melburb-barista.gif`}
+              alt="An 8-bit barista making coffee at a Melbourne café"
+            />
+            <div className="barista-banner-copy">
+              <span>NOW SERVING</span>
+              <strong>ONE FRESH SUBURB</strong>
+              <small>WITH EVERY CUP</small>
+            </div>
+          </section>
           <nav className="mode-switcher" aria-label="Game mode">
             <button
               className={gameMode === "daily" ? "active" : ""}

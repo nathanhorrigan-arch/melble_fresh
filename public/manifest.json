@@ -1,6 +1,6 @@
 {
-  "short_name": "Melble",
-  "name": "Wordle game in the Melbs",
+  "short_name": "MelBurb",
+  "name": "MelBurb — the Melbourne suburb guessing game",
   "icons": [
     {
       "src": "favicon.ico",
@@ -21,5 +21,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#0c0908"
 }

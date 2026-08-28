@@ -1,7 +1,7 @@
 import { Guesses } from "../Guesses";
 import { Panel } from "./Panel";
 import React from "react";
-import { Melble } from "../Melble";
+import { MelBurb } from "../MelBurb";
 import { formatDistance } from "../../domain/geography";
 import { SettingsData } from "../../hooks/useSettings";
 import Twemoji from "./../Twemoji";
@@ -17,7 +17,7 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
     <Panel title="How to play" isOpen={isOpen} close={close}>
       <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
         <div>
-          Guess the <Melble /> in 6 guesses.
+          Guess the <MelBurb /> in 6 guesses.
         </div>
         <div>
           Each guess must be a valid suburb of Melbourne (not including
@@ -96,11 +96,11 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
         </div>
       </div>
       <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3 font-bold">
-        A new <Melble /> will be available every day, and Practice mode is
+        A new <MelBurb /> will be available every day, and Practice mode is
         always open!
       </div>
       <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
-        <Melble /> is a fork of{" "}
+        <MelBurb /> is a fork of{" "}
         <a
           className="underline"
           href="https://worldle.teuteuf.fr/"
@@ -131,7 +131,7 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
       </div>
       <div className="space-y-3 text-justify pb-3">
         <div>
-          Melble variant made by{" "}
+          MelBurb variant made by{" "}
           <a
             className="underline"
             href="https://twitter.com/lucasazzola"

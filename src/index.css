@@ -47,9 +47,6 @@ a:focus-visible {
   z-index: 1;
   min-height: 100vh;
   background: rgba(12, 9, 8, 0.94);
-  border-left: 2px solid #3b2a22;
-  border-right: 2px solid #3b2a22;
-  box-shadow: 0 0 70px #000;
 }
 
 .cafe-header {
@@ -68,6 +65,83 @@ a:focus-visible {
 
 .pixel-title span {
   color: var(--gumleaf);
+}
+
+.barista-banner {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 230px;
+  overflow: hidden;
+  border-bottom: 4px solid var(--brick);
+  background: linear-gradient(
+      90deg,
+      rgba(5, 4, 3, 0.94),
+      rgba(21, 15, 11, 0.72)
+    ),
+    repeating-linear-gradient(90deg, #21130e 0 42px, #2c1912 42px 45px);
+}
+
+.barista-banner img {
+  width: 260px;
+  height: 260px;
+  object-fit: cover;
+  image-rendering: pixelated;
+  align-self: center;
+  border-left: 4px solid #3e281f;
+  border-right: 4px solid #3e281f;
+}
+
+.barista-banner-copy {
+  width: min(42vw, 420px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px 32px;
+  background: rgba(8, 6, 5, 0.78);
+  border-right: 4px solid #3e281f;
+}
+
+.barista-banner-copy span,
+.barista-banner-copy small {
+  color: var(--gumleaf);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+}
+
+.barista-banner-copy strong {
+  margin: 8px 0;
+  color: var(--crema);
+  font-size: clamp(1.2rem, 2.4vw, 2rem);
+  line-height: 1.15;
+  text-shadow: 3px 3px 0 #6d3325;
+}
+
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(5px);
+}
+
+.panel-modal {
+  width: min(100%, 720px);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  outline: none;
+  box-shadow: 10px 10px 0 rgba(74, 40, 28, 0.72);
+}
+
+.ReactModal__Body--open {
+  overflow: hidden;
 }
 
 .mode-switcher {
@@ -230,6 +304,29 @@ a:focus-visible {
   }
   .table-note {
     display: none;
+  }
+  .barista-banner {
+    min-height: 150px;
+  }
+  .barista-banner img {
+    width: 150px;
+    height: 150px;
+  }
+  .barista-banner-copy {
+    width: auto;
+    flex: 1;
+    padding: 14px;
+  }
+  .barista-banner-copy span,
+  .barista-banner-copy small {
+    font-size: 0.55rem;
+  }
+  .panel-overlay {
+    align-items: flex-start;
+    padding: 8px;
+  }
+  .panel-modal {
+    max-height: calc(100vh - 16px);
   }
 }
 

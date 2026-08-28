@@ -35,7 +35,7 @@ export const translations = {
         guessDistribution: "Guess distribution:",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "App Install:",
         description: "Add Worldle to Home Screen to play it easily!",
         instructionTitle: "Instructions:",
@@ -95,7 +95,7 @@ export const translations = {
         guessDistribution: "Répartitions des victoires:",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "Installer l'app:",
         description:
           "Ajouter Worldle sur l'écran d'accueil pour le retrouver plus facilement !",
@@ -216,7 +216,7 @@ export const translations = {
         guessDistribution: "Találatok eloszlása:",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "App Letöltése:",
         description:
           "Add hozzá a Worldle a Kezdőképernyőhöz, hogy egyszerűbben játszhass!",
@@ -271,7 +271,7 @@ export const translations = {
         guessDistribution: "Kansverspreiding:",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "Appinstallatie:",
         description:
           "Voeg Worldle toe aan je beginscherm om het makkelijk te spelen!",
@@ -328,7 +328,7 @@ export const translations = {
         guessDistribution: "Podział odgadnięć:",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "Instalacja:",
         description: "Dodaj Worldle do ekranu głównego żeby grać łatwiej!",
         instructionTitle: "Instrukcja:",
@@ -387,7 +387,7 @@ export const translations = {
         guessDistribution: "Distribuição de palpites:",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "Instalar App:",
         description:
           "Adicione Worldle a sua página inicial para jogar mais facilmente!",
@@ -447,7 +447,7 @@ export const translations = {
         guessDistribution: "Verteilung der Versuche:",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "App Installieren:",
         description:
           "Worldle zum Startbildschirm hinzufügen um einfacher zu spielen!",
@@ -507,7 +507,7 @@ export const translations = {
         guessDistribution: "的中までの回答数",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "アプリをインストール",
         description: "ホーム画面にWorldleを追加してプレイしやすくしましょう！",
         instructionTitle: "やり方",
@@ -567,7 +567,7 @@ export const translations = {
         guessDistribution: "Classificazione di e vittorie",
       },
       install: {
-        title: "Melble",
+        title: "MelBurb",
         descritpionTitle: "Installà l’appiecazione :",
         description:
           "Aghjunghje Worldle à u screnu d’accolta per ghjucà più prestu !",
