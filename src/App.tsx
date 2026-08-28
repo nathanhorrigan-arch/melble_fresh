@@ -67,10 +67,6 @@ export default function App() {
         onChange={setProgress}
       />
       <div className="cafe-world flex justify-center flex-auto text-stone-100">
-        <div className="cafe-window" aria-hidden="true">
-          <div className="pixel-rain" />
-          <div className="tram">96</div>
-        </div>
         <div className="w-full max-w-xl flex flex-col cafe-game-shell">
           <header className="cafe-header px-3 flex items-center">
             <button
