@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MelBurb Dashboard</title>
+    <style>
+      :root { --black:#090706; --panel:#15100e; --line:#694438; --crema:#f8e2b8; --green:#75b98c; --amber:#f7bb3e; --muted:#bba995; }
+      * { box-sizing:border-box; }
+      body { margin:0; min-height:100vh; padding:32px 18px; color:var(--crema); background:var(--black); font-family:"Courier New",monospace; }
+      main { width:min(100%,980px); margin:auto; }
+      header { display:flex; align-items:end; justify-content:space-between; gap:20px; padding-bottom:20px; border-bottom:4px solid var(--line); }
+      h1 { margin:0; font-size:clamp(2.2rem,7vw,4.8rem); letter-spacing:.12em; text-shadow:4px 4px #6d3325; }
+      header p { margin:0; color:var(--green); font-weight:900; letter-spacing:.12em; }
+      .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:24px 0; }
+      .card,.panel { border:3px solid var(--line); background:var(--panel); }
+      .card { min-height:142px; display:grid; align-content:center; padding:18px; text-align:center; }
+      .card span { color:var(--green); font-size:.78rem; font-weight:900; letter-spacing:.15em; }
+      .card strong { display:block; margin-top:8px; color:var(--amber); font-size:2.5rem; }
+      .panel { padding:20px; }
+      .panel h2 { margin:0 0 14px; font-size:1rem; letter-spacing:.12em; }
+      .status { margin:0; color:var(--muted); line-height:1.6; }
+      button { border:3px solid var(--crema); padding:12px 18px; color:var(--crema); background:transparent; font:900 .9rem "Courier New",monospace; cursor:pointer; }
+      button:hover { color:var(--black); background:var(--amber); }
+      footer { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:20px; color:var(--muted); font-size:.8rem; }
+      .error { color:#ff8d82; }
+      @media(max-width:720px){ header,footer{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header><div><h1>MELBURB</h1><p>CAFÉ COUNTER DASHBOARD</p></div><button id="refresh">REFRESH NUMBERS</button></header>
+      <section class="grid" aria-label="Website statistics">
+        <article class="card"><span>VISITS · 7 DAYS</span><strong id="visits7">—</strong></article>
+        <article class="card"><span>VISITS · 30 DAYS</span><strong id="visits30">—</strong></article>
+        <article class="card"><span>REGISTERED PLAYERS</span><strong id="registered">—</strong></article>
+        <article class="card"><span>NEW · 7 DAYS</span><strong id="new7">—</strong></article>
+      </section>
+      <section class="panel"><h2>SOURCE STATUS</h2><p class="status" id="status">Fetching the latest numbers…</p></section>
+      <footer><span>Traffic: Cloudflare Analytics · Registrations: Supabase Auth</span><span id="updated"></span></footer>
+    </main>
+    <script>
+      const ids = Object.fromEntries(["visits7","visits30","registered","new7","status","updated"].map(id => [id, document.getElementById(id)]));
+      const number = value => new Intl.NumberFormat("en-AU").format(value ?? 0);
+      async function refresh() {
+        ids.status.className = "status"; ids.status.textContent = "Fetching the latest numbers…";
+        try {
+          const response = await fetch("/api/dashboard", { cache:"no-store" });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || "Dashboard request failed.");
+          const messages = [];
+          if (result.traffic7.data) ids.visits7.textContent = number(result.traffic7.data.visits); else messages.push(result.traffic7.error);
+          if (result.traffic30.data) ids.visits30.textContent = number(result.traffic30.data.visits); else messages.push(result.traffic30.error);
+          if (result.registrations.data) {
+            ids.registered.textContent = number(result.registrations.data.total);
+            ids.new7.textContent = number(result.registrations.data.last7Days);
+          } else messages.push(result.registrations.error);
+          ids.status.textContent = messages.length ? messages.join(" ") : "Both sources connected successfully.";
+          ids.status.className = messages.length ? "status error" : "status";
+          ids.updated.textContent = `Updated ${new Date(result.updatedAt).toLocaleString("en-AU")}`;
+        } catch (error) { ids.status.className = "status error"; ids.status.textContent = error.message; }
+      }
+      document.getElementById("refresh").addEventListener("click", refresh);
+      refresh();
+    </script>
+  </body>
+</html>
