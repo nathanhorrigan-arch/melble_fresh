@@ -366,26 +366,6 @@ export function Game({
         settingsData={settingsData}
         suburbInputRef={suburbInputRef}
       />
-      {!gameEnded && suburb && (
-        <section className="clue-board">
-          <div className="flex items-center justify-between mb-2">
-            <h2>BARISTA CLUES</h2>
-            <span>{awardsPoints ? "-10 points each" : "Free in practice"}</span>
-          </div>
-          <div className="grid grid-cols-3 gap-2">
-            {clueText.map((clue, index) => (
-              <button
-                key={clue}
-                type="button"
-                onClick={() => revealClue(index)}
-                className={revealedClues.includes(index) ? "revealed" : ""}
-              >
-                {revealedClues.includes(index) ? clue : `Clue ${index + 1}`}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
       <div className="my-2">
         {gameEnded && suburb ? (
           <>
@@ -480,29 +460,57 @@ export function Game({
             )}
           </>
         ) : (
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col">
-              <label className="guess-entry-label" htmlFor="suburb-guess">
-                Start your guess here
-              </label>
-              <SuburbInput
-                inputRef={suburbInputRef}
-                currentGuess={currentGuess}
-                setCurrentGuess={setCurrentGuess}
-              />
-              <button
-                className="rounded font-bold p-1 flex items-center justify-center border-2 uppercase my-0.5 hover:bg-gray-50 active:bg-gray-100 dark:hover:bg-slate-800 dark:active:bg-slate-700"
-                type="submit"
-              >
-                <Twemoji
-                  text="☕"
-                  options={{ className: "inline-block" }}
-                  className="flex items-center justify-center"
-                />{" "}
-                <span className="ml-1">{t("guess")}</span>
-              </button>
-            </div>
-          </form>
+          <>
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-col">
+                <label className="guess-entry-label" htmlFor="suburb-guess">
+                  Start your guess here
+                </label>
+                <SuburbInput
+                  inputRef={suburbInputRef}
+                  currentGuess={currentGuess}
+                  setCurrentGuess={setCurrentGuess}
+                />
+                <button
+                  className="rounded font-bold p-1 flex items-center justify-center border-2 uppercase my-0.5 hover:bg-gray-50 active:bg-gray-100 dark:hover:bg-slate-800 dark:active:bg-slate-700"
+                  type="submit"
+                >
+                  <Twemoji
+                    text="☕"
+                    options={{ className: "inline-block" }}
+                    className="flex items-center justify-center"
+                  />{" "}
+                  <span className="ml-1">{t("guess")}</span>
+                </button>
+              </div>
+            </form>
+            {suburb && (
+              <section className="clue-board">
+                <div className="flex items-center justify-between mb-2">
+                  <h2>BARISTA CLUES</h2>
+                  <span>
+                    {awardsPoints ? "-10 points each" : "Free in practice"}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {clueText.map((clue, index) => (
+                    <button
+                      key={clue}
+                      type="button"
+                      onClick={() => revealClue(index)}
+                      className={
+                        revealedClues.includes(index) ? "revealed" : ""
+                      }
+                    >
+                      {revealedClues.includes(index)
+                        ? clue
+                        : `Clue ${index + 1}`}
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
         )}
       </div>
       <section className="yesterday-cafe">
