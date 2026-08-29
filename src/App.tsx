@@ -88,17 +88,15 @@ export default function App() {
       <History isOpen={historyOpen} close={closeHistory} />
       <div className="cafe-world flex justify-center flex-auto text-stone-100">
         <div className="w-full flex flex-col cafe-game-shell">
-          <header className="cafe-header px-3">
-            <h1 className="pixel-title text-center my-2">
-              ME<span>L</span>BU<span>R</span>B
-            </h1>
-          </header>
           <section className="barista-banner" aria-label="MelBurb café barista">
             <img
               src={`${process.env.PUBLIC_URL}/images/cafe/melburb-barista.gif`}
               alt="An 8-bit barista making coffee at a Melbourne café"
             />
             <div className="barista-banner-copy">
+              <h1 className="pixel-title barista-title">
+                ME<span>L</span>BU<span>R</span>B
+              </h1>
               <span>FRESHLY BREWED DAILY</span>
               <strong>ONE MELBOURNE SUBURB</strong>
               <small>CAN YOU NAME IT?</small>
