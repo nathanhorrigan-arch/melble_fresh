@@ -482,6 +482,9 @@ export function Game({
         ) : (
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col">
+              <label className="guess-entry-label" htmlFor="suburb-guess">
+                Start your guess here
+              </label>
               <SuburbInput
                 inputRef={suburbInputRef}
                 currentGuess={currentGuess}
@@ -492,7 +495,7 @@ export function Game({
                 type="submit"
               >
                 <Twemoji
-                  text="🇦🇺"
+                  text="☕"
                   options={{ className: "inline-block" }}
                   className="flex items-center justify-center"
                 />{" "}
