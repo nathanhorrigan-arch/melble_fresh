@@ -16,6 +16,7 @@ import { bestGuessPercent, dayCount } from "../domain/guessStats";
 import type { GameMode } from "../App";
 import { getGameScore } from "../domain/guess";
 import { PlayerProgress, recordCompletedGame } from "../domain/progress";
+import { synchronizeCompletedGame } from "../domain/cloudProgress";
 
 const ENABLE_TWITCH_LINK = false;
 const MAX_TRY_COUNT = 6;
@@ -95,9 +96,35 @@ export function Game({
 
   useEffect(() => {
     if (gameEnded && guesses.length > 0) {
-      onProgress(recordCompletedGame(dayString, guesses, revealedClues.length));
+      const localProgress = recordCompletedGame(
+        dayString,
+        guesses,
+        revealedClues.length
+      );
+      onProgress(localProgress);
+      synchronizeCompletedGame(
+        dayString,
+        gameMode,
+        guesses,
+        revealedClues.length
+      )
+        .then((cloudProgress) => {
+          if (cloudProgress) onProgress(cloudProgress);
+        })
+        .catch(() => {
+          toast.info(
+            "Score saved on this device. Cloud sync will retry later."
+          );
+        });
     }
-  }, [dayString, gameEnded, guesses, onProgress, revealedClues.length]);
+  }, [
+    dayString,
+    gameEnded,
+    gameMode,
+    guesses,
+    onProgress,
+    revealedClues.length,
+  ]);
 
   const revealClue = (index: number) => {
     if (revealedClues.includes(index)) return;

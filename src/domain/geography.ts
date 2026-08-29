@@ -40,7 +40,7 @@ const DIRECTION_ARROWS: Record<Direction, string> = {
 };
 
 export function getDirectionEmoji(guess: Guess) {
-  return guess.distance === 0 ? "🎉" : DIRECTION_ARROWS[guess.direction];
+  return guess.distance === 0 ? "☕" : DIRECTION_ARROWS[guess.direction];
 }
 
 export function computeProximityPercent(distance: number): number {
