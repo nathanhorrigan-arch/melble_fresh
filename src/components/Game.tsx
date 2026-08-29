@@ -495,7 +495,7 @@ export function Game({
                 type="submit"
               >
                 <Twemoji
-                  text="🇦🇺"
+                  text="☕"
                   options={{ className: "inline-block" }}
                   className="flex items-center justify-center"
                 />{" "}
