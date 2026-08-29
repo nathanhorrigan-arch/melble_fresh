@@ -389,6 +389,45 @@ a:focus-visible {
   color: var(--amber);
 }
 
+.guess-entry-label {
+  align-self: flex-start;
+  margin: 0 0 5px 4px;
+  padding: 4px 10px;
+  background: var(--amber);
+  color: #080605;
+  font-size: clamp(0.72rem, 1.4vw, 0.95rem);
+  font-weight: 1000;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 #6d3325;
+}
+
+.guess-entry-field {
+  border: 4px solid var(--amber);
+  background: #080605;
+  box-shadow: 0 0 0 3px rgba(255, 190, 63, 0.18),
+    0 0 18px rgba(255, 190, 63, 0.2);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.guess-entry-field:focus-within {
+  border-color: var(--crema);
+  box-shadow: 0 0 0 4px rgba(255, 226, 174, 0.28),
+    0 0 24px rgba(255, 190, 63, 0.42);
+}
+
+.guess-entry-input {
+  min-height: 58px;
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.guess-entry-input::placeholder {
+  color: #d7c8b7;
+  opacity: 1;
+}
+
 .mode-switcher {
   display: grid;
   grid-auto-flow: column;
