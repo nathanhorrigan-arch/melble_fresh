@@ -137,7 +137,29 @@ a:focus-visible {
   display: grid;
   gap: 0.6rem;
   max-height: 55vh;
+  padding-bottom: 1.25rem;
   overflow-y: auto;
+  scroll-padding-bottom: 1.25rem;
+}
+
+.history-statistics {
+  margin-bottom: 1.25rem;
+  border: 2px solid #594039;
+  background: #100d0c;
+  padding: 1rem;
+}
+
+.history-statistics > h3,
+.history-results-title {
+  margin-bottom: 0.75rem;
+  color: var(--crema);
+}
+
+.history-results-title {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .history-row {
@@ -331,7 +353,7 @@ a:focus-visible {
 
 .site-menu {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 2px;
   padding: 10px 12px 0;
   background: #0a0807;
@@ -380,7 +402,7 @@ a:focus-visible {
 
 .game-status {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 6px;
   margin: 8px 0 12px;
 }
@@ -474,6 +496,42 @@ a:focus-visible {
   max-width: 360px;
 }
 
+.yesterday-cafe {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 1.25rem;
+  border: 2px solid #594039;
+  background: #100d0c;
+  padding: 1rem;
+  text-align: center;
+}
+
+.yesterday-cafe > span {
+  color: var(--gumleaf);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.yesterday-cafe > strong {
+  color: var(--crema);
+  font-size: 1.4rem;
+  text-shadow: 2px 2px 0 #6d3325;
+}
+
+.yesterday-cafe > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.5rem;
+}
+
+.yesterday-cafe a {
+  color: var(--amber);
+  font-weight: 800;
+  text-decoration: underline;
+}
+
 .achievement-chip {
   border: 1px solid #6c503d;
   background: #201713;
@@ -532,28 +590,32 @@ a:focus-visible {
   color: #f8e2b8;
 }
 
-.cafe-table-edge {
+.cafe-credit {
   margin-top: auto;
-  min-height: 64px;
-  padding: 14px 20px;
-  border-top: 5px solid #74422d;
-  background: repeating-linear-gradient(
-    90deg,
-    #48291e 0 42px,
-    #523022 42px 44px
-  );
+  padding: 1.25rem 1rem;
+  background: #0a0807;
+  color: #b9aa98;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  text-align: center;
 }
-.coffee-cup {
-  font-size: 1.8rem;
-  filter: grayscale(0.25);
+
+.cafe-credit p {
+  max-width: 760px;
 }
-.table-note {
-  color: #cba677;
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
+
+.cafe-credit-icon {
+  flex: 0 0 auto;
+  font-size: 1.5rem;
+}
+
+.cafe-credit-icon img {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 @media (max-width: 430px) {
@@ -569,9 +631,6 @@ a:focus-visible {
   }
   .game-status strong {
     font-size: 0.7rem;
-  }
-  .table-note {
-    display: none;
   }
   .barista-banner {
     min-height: 190px;

@@ -36,7 +36,7 @@ export function Panel({
       className="panel-modal"
       ariaHideApp={false}
     >
-      <div className="w-full bg-stone-950 text-stone-100 text-sm overflow-auto px-4 border-4 border-amber-900">
+      <div className="w-full bg-stone-950 text-stone-100 text-sm overflow-auto px-4 pb-4 border-4 border-amber-900">
         <header className="border-b-2 border-amber-700 mb-3 flex">
           <h2
             className="text-2xl font-bold uppercase tracking-wide text-center my-1 flex-auto"

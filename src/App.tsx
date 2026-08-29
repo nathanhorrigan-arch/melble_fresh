@@ -5,17 +5,16 @@ import React, { useEffect, useState } from "react";
 import { Infos } from "./components/panels/Infos";
 import { Settings } from "./components/panels/Settings";
 import { useSettings } from "./hooks/useSettings";
-import { Stats } from "./components/panels/Stats";
 import { Profile } from "./components/panels/Profile";
 import { loadProgress, PlayerProgress } from "./domain/progress";
 import { History } from "./components/panels/History";
+import Twemoji from "./components/Twemoji";
 
 export type GameMode = "daily" | "practice" | "challenge";
 
 export default function App() {
   const [infoOpen, setInfoOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [statsOpen, setStatsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(
     () => window.location.hash === "#history"
@@ -80,7 +79,6 @@ export default function App() {
         settingsData={settingsData}
         updateSettings={updateSettings}
       />
-      <Stats isOpen={statsOpen} close={() => setStatsOpen(false)} />
       <Profile
         isOpen={profileOpen}
         close={() => setProfileOpen(false)}
@@ -115,9 +113,6 @@ export default function App() {
             </button>
             <button type="button" onClick={() => setHistoryOpen(true)}>
               Game History
-            </button>
-            <button type="button" onClick={() => setStatsOpen(true)}>
-              Statistics
             </button>
             <button type="button" onClick={() => setSettingsOpen(true)}>
               Settings
@@ -158,12 +153,15 @@ export default function App() {
               setPracticeRound(next);
             }}
           />
-          <div className="cafe-table-edge" aria-hidden="true">
-            <span className="coffee-cup">☕</span>
-            <span className="table-note">
-              MELBOURNE · 8 BIT · ONE MORE ROUND
-            </span>
-          </div>
+          <footer className="cafe-credit">
+            <Twemoji text="☕" className="cafe-credit-icon" />
+            <p>
+              We&apos;re shouting a coffee to the original Melble GitHub brew,
+              the Worldle fork that inspired this site — with a tip of the
+              beanie to Wordle creator Josh Wardle.
+            </p>
+            <Twemoji text="☕" className="cafe-credit-icon" />
+          </footer>
         </div>
       </div>
     </>

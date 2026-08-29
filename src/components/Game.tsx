@@ -8,7 +8,7 @@ import { Guesses } from "./Guesses";
 import { useTranslation } from "react-i18next";
 import { SettingsData } from "../hooks/useSettings";
 import { useMode } from "../hooks/useMode";
-import { getDayString, useTodays } from "../hooks/useTodays";
+import { getDayString, getSuburbForDay, useTodays } from "../hooks/useTodays";
 import Twemoji from "./Twemoji";
 import { suburbs } from "../domain/suburbs.position";
 import { event } from "../domain/analytics";
@@ -44,6 +44,11 @@ export function Game({
   const dailyKey = useMemo(
     () => getDayString(settingsData.shiftDayCount),
     [settingsData.shiftDayCount]
+  );
+  const yesterdaySuburbName = useMemo(
+    () =>
+      getSuburbName(i18n.resolvedLanguage, getSuburbForDay(getDayString(-1))),
+    [i18n.resolvedLanguage]
   );
   const dayString =
     gameMode === "practice"
@@ -81,7 +86,10 @@ export function Game({
   const gameEnded =
     guesses.length === MAX_TRY_COUNT ||
     guesses[guesses.length - 1]?.distance === 0;
-  const gameScore = getGameScore(guesses, revealedClues.length);
+  const awardsPoints = gameMode === "daily";
+  const gameScore = awardsPoints
+    ? getGameScore(guesses, revealedClues.length)
+    : 0;
 
   useEffect(() => {
     const stored = localStorage.getItem(`clues-${dayString}`);
@@ -99,7 +107,8 @@ export function Game({
       const localProgress = recordCompletedGame(
         dayString,
         guesses,
-        revealedClues.length
+        revealedClues.length,
+        awardsPoints
       );
       onProgress(localProgress);
       synchronizeCompletedGame(
@@ -123,6 +132,7 @@ export function Game({
     gameMode,
     guesses,
     onProgress,
+    awardsPoints,
     revealedClues.length,
   ]);
 
@@ -221,7 +231,11 @@ export function Game({
             <strong>
               {getSuburbName(i18n.resolvedLanguage, suburb).toUpperCase()}
             </strong>
-            <small>+{gameScore} POINTS</small>
+            <small>
+              {awardsPoints
+                ? `+${gameScore} POINTS`
+                : `${gameMode.toUpperCase()} — NO POINTS`}
+            </small>
             <a href="#history">VIEW YOUR HISTORY</a>
           </span>
         </span>,
@@ -237,7 +251,14 @@ export function Game({
         toast.dismiss(toastId);
       }
     };
-  }, [todays, dayString, gameScore, i18n.resolvedLanguage]);
+  }, [
+    todays,
+    dayString,
+    gameMode,
+    gameScore,
+    awardsPoints,
+    i18n.resolvedLanguage,
+  ]);
 
   return (
     <div className="flex-grow flex flex-col mx-3 sm:mx-5">
@@ -265,10 +286,14 @@ export function Game({
               : "FRIEND"}
           </strong>
         </div>
-        <div>
-          <span className="status-label">POT</span>
-          <strong>{Math.max(25, 100 - revealedClues.length * 10)} PTS</strong>
-        </div>
+        {awardsPoints && (
+          <div>
+            <span className="status-label">POT</span>
+            <strong aria-live="polite">
+              {Math.max(25, 100 - revealedClues.length * 10)} PTS
+            </strong>
+          </div>
+        )}
       </div>
       {hideImageMode && !gameEnded && (
         <button
@@ -345,7 +370,7 @@ export function Game({
         <section className="clue-board">
           <div className="flex items-center justify-between mb-2">
             <h2>BARISTA CLUES</h2>
-            <span>-10 points each</span>
+            <span>{awardsPoints ? "-10 points each" : "Free in practice"}</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             {clueText.map((clue, index) => (
@@ -477,6 +502,28 @@ export function Game({
           </form>
         )}
       </div>
+      <section className="yesterday-cafe">
+        <span>YESTERDAY&apos;S CAFÉ LOCATION</span>
+        <strong>{yesterdaySuburbName.toUpperCase()}</strong>
+        <div>
+          <a
+            href={getBroadsheetSuburbUrl(yesterdaySuburbName)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            ☕ Browse cafés on Broadsheet
+          </a>
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+              `${yesterdaySuburbName} cafés VIC`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            📍 Find cafés on Google Maps
+          </a>
+        </div>
+      </section>
     </div>
   );
 }

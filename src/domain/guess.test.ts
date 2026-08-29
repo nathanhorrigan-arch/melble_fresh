@@ -48,6 +48,7 @@ describe("game scoring", () => {
   });
 
   it("deducts ten points for every clue", () => {
+    expect(getGameScore([guess(0)], 2)).toBe(80);
     expect(getGameScore([guess(2_000)], 2)).toBe(30);
     expect(getGameScore([guess(0)], 3)).toBe(70);
   });

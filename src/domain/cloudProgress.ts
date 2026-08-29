@@ -5,6 +5,7 @@ import { loadProgress, PlayerProgress, saveProgress } from "./progress";
 
 export interface GameResult {
   game_key: string;
+  mode: GameMode;
   score: number;
   guesses_count: number;
   closest_distance_m: number;
@@ -37,7 +38,7 @@ function toResultRow(
     user_id: userId,
     game_key: gameKey,
     mode,
-    score: getGameScore(guesses, clueCount),
+    score: mode === "daily" ? getGameScore(guesses, clueCount) : 0,
     guesses_count: guesses.length,
     closest_distance_m: Math.min(...guesses.map((guess) => guess.distance)),
     solved: guesses.some((guess) => guess.distance === 0),
@@ -50,7 +51,7 @@ export function progressFromResults(
   displayName: string
 ): PlayerProgress {
   const totalPoints = results.reduce(
-    (total, result) => total + result.score,
+    (total, result) => total + (result.mode === "daily" ? result.score : 0),
     0
   );
   const closeCalls = results.filter(
@@ -82,7 +83,7 @@ async function loadCloudProgress(
 ): Promise<PlayerProgress> {
   const { data, error } = await supabase
     .from("game_results")
-    .select("game_key, score, guesses_count, closest_distance_m, solved")
+    .select("game_key, mode, score, guesses_count, closest_distance_m, solved")
     .eq("user_id", userId)
     .order("played_at", { ascending: true });
 
