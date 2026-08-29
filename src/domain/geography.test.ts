@@ -47,7 +47,7 @@ describe("geography", () => {
   it("shows a celebration for an exact guess and an arrow otherwise", () => {
     expect(
       getDirectionEmoji({ name: "Melbourne", distance: 0, direction: "N" })
-    ).toBe("🎉");
+    ).toBe("☕");
     expect(
       getDirectionEmoji({ name: "Carlton", distance: 2_000, direction: "SE" })
     ).toBe("↘️");

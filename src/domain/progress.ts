@@ -20,6 +20,11 @@ const initialProgress: PlayerProgress = {
   scoredGames: [],
 };
 
+export function saveProgress(progress: PlayerProgress): PlayerProgress {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  return progress;
+}
+
 export function loadProgress(): PlayerProgress {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return initialProgress;
@@ -35,8 +40,7 @@ export function saveDisplayName(displayName: string): PlayerProgress {
     ...loadProgress(),
     displayName: displayName.trim() || "Café Guest",
   };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  return progress;
+  return saveProgress(progress);
 }
 
 export function recordCompletedGame(
@@ -68,6 +72,5 @@ export function recordCompletedGame(
     achievements: Array.from(achievements),
     scoredGames: [...current.scoredGames, gameKey],
   };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  return progress;
+  return saveProgress(progress);
 }

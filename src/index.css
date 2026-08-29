@@ -363,6 +363,56 @@ a:focus-visible {
   font-size: 0.75rem;
 }
 
+.account-form,
+.account-status {
+  display: grid;
+  gap: 0.65rem;
+  border: 2px solid #594039;
+  background: #100d0c;
+  padding: 1rem;
+}
+
+.account-form label,
+.account-status span {
+  color: #63b27d;
+  font-family: "Courier New", monospace;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.account-form input {
+  width: 100%;
+  border: 2px solid #75605a;
+  background: #070606;
+  color: #f8e2b8;
+  padding: 0.7rem;
+}
+
+.account-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 2px solid #594039;
+}
+
+.account-tabs button {
+  padding: 0.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.account-tabs button.active {
+  background: #f7bb3e;
+  color: #090706;
+}
+
+.account-message {
+  border-left: 4px solid #f7bb3e;
+  background: #17110e;
+  padding: 0.75rem;
+  color: #f8e2b8;
+}
+
 .cafe-table-edge {
   margin-top: auto;
   min-height: 64px;
