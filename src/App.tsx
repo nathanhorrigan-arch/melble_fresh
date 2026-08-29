@@ -101,21 +101,21 @@ export default function App() {
               <strong>ONE MELBOURNE SUBURB</strong>
               <small>CAN YOU NAME IT?</small>
             </div>
+            <nav className="site-menu" aria-label="Player menu">
+              <button type="button" onClick={() => setInfoOpen(true)}>
+                How to Play
+              </button>
+              <button type="button" onClick={() => setProfileOpen(true)}>
+                Login / Register
+              </button>
+              <button type="button" onClick={() => setHistoryOpen(true)}>
+                Game History
+              </button>
+              <button type="button" onClick={() => setSettingsOpen(true)}>
+                Settings
+              </button>
+            </nav>
           </section>
-          <nav className="site-menu" aria-label="Player menu">
-            <button type="button" onClick={() => setInfoOpen(true)}>
-              How to Play
-            </button>
-            <button type="button" onClick={() => setProfileOpen(true)}>
-              Login / Register
-            </button>
-            <button type="button" onClick={() => setHistoryOpen(true)}>
-              Game History
-            </button>
-            <button type="button" onClick={() => setSettingsOpen(true)}>
-              Settings
-            </button>
-          </nav>
           <nav className="mode-switcher" aria-label="Game mode">
             <button
               className={gameMode === "daily" ? "active" : ""}
