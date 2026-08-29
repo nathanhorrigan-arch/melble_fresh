@@ -215,7 +215,16 @@ export function Game({
       event("post_score", { level, score: bestGuessPercent(guesses) });
 
       toastId = toast.info(
-        getSuburbName(i18n.resolvedLanguage, suburb).toUpperCase(),
+        <span className="suburb-answer-toast">
+          <Twemoji text="☕" />
+          <span className="suburb-answer-details">
+            <strong>
+              {getSuburbName(i18n.resolvedLanguage, suburb).toUpperCase()}
+            </strong>
+            <small>+{gameScore} POINTS</small>
+            <a href="#history">VIEW YOUR HISTORY</a>
+          </span>
+        </span>,
         {
           autoClose: false,
           delay: 2000,
@@ -228,7 +237,7 @@ export function Game({
         toast.dismiss(toastId);
       }
     };
-  }, [todays, dayString, i18n.resolvedLanguage]);
+  }, [todays, dayString, gameScore, i18n.resolvedLanguage]);
 
   return (
     <div className="flex-grow flex flex-col mx-3 sm:mx-5">

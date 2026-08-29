@@ -61,8 +61,7 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
             password,
             options: {
               data: { display_name: name.trim() || "MelBurb Player" },
-              emailRedirectTo:
-                "https://nathanhorrigan-arch.github.io/melble_fresh/",
+              emailRedirectTo: "https://www.melburb.com/",
             },
           })
         : await supabase.auth.signInWithPassword({ email, password });

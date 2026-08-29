@@ -55,11 +55,7 @@ export function Share({
       })
       .join("\n");
 
-    return [
-      title,
-      guessString,
-      "https://nathanhorrigan-arch.github.io/melble_fresh/",
-    ].join("\n");
+    return [title, guessString, "https://www.melburb.com/"].join("\n");
   }, [dayString, guesses, hideImageMode, rotationMode, theme]);
 
   return (

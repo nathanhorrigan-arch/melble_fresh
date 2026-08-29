@@ -50,9 +50,6 @@ a:focus-visible {
 }
 
 .cafe-header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
   border-bottom: 4px solid var(--brick);
   background: #0a0807;
 }
@@ -66,16 +63,111 @@ a:focus-visible {
   text-shadow: 3px 3px 0 #6d3325;
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding-left: 20px;
-  font-size: 1.5rem;
-}
-
 .pixel-title span {
   color: var(--gumleaf);
+}
+
+.suburb-answer-toast {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  color: var(--crema);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.45rem;
+  font-weight: 1000;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+  text-shadow: 2px 2px 0 #6d3325;
+}
+
+.suburb-answer-toast img {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.suburb-answer-details {
+  display: grid;
+  gap: 0.25rem;
+  text-align: left;
+}
+
+.suburb-answer-details small {
+  color: var(--amber);
+  font-size: 0.75em;
+  letter-spacing: 0.08em;
+}
+
+.suburb-answer-details a {
+  color: var(--gumleaf);
+  font-size: 0.58em;
+  letter-spacing: 0.08em;
+  text-decoration: underline;
+}
+
+.history-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.history-summary > div {
+  display: grid;
+  border: 2px solid #594039;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.history-summary strong {
+  color: var(--amber);
+  font-size: 1.6rem;
+}
+
+.history-summary span,
+.history-row span {
+  color: var(--gumleaf);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.history-list {
+  display: grid;
+  gap: 0.6rem;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  border: 2px solid #594039;
+  background: #100d0c;
+  padding: 0.8rem;
+}
+
+.history-row > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.history-row small {
+  color: #c9bcae;
+}
+
+.history-row b {
+  color: var(--amber);
+  white-space: nowrap;
+}
+
+.history-empty {
+  border: 2px dashed #594039;
+  padding: 1.25rem;
+  text-align: center;
 }
 
 .barista-banner {
@@ -94,7 +186,7 @@ a:focus-visible {
 }
 
 .barista-banner img {
-  width: 50%;
+  width: 42%;
   height: 360px;
   object-fit: cover;
   image-rendering: pixelated;
@@ -103,7 +195,7 @@ a:focus-visible {
 }
 
 .barista-banner-copy {
-  width: 50%;
+  width: 58%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -122,8 +214,9 @@ a:focus-visible {
 .barista-banner-copy strong {
   margin: 8px 0;
   color: var(--crema);
-  font-size: clamp(2.4rem, 4.8vw, 4rem);
+  font-size: clamp(1.75rem, 3.4vw, 3.4rem);
   line-height: 1.15;
+  white-space: nowrap;
   text-shadow: 3px 3px 0 #6d3325;
 }
 
@@ -234,6 +327,32 @@ a:focus-visible {
 
 .ReactModal__Body--open {
   overflow: hidden;
+}
+
+.site-menu {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2px;
+  padding: 10px 12px 0;
+  background: #0a0807;
+}
+
+.site-menu button {
+  min-height: 48px;
+  padding: 8px 6px;
+  border: 2px solid #594039;
+  background: #17110e;
+  color: var(--crema);
+  font-size: clamp(0.7rem, 1.4vw, 1rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.site-menu button:hover,
+.site-menu button:focus-visible {
+  border-color: var(--amber);
+  color: var(--amber);
 }
 
 .mode-switcher {
@@ -442,10 +561,11 @@ a:focus-visible {
     font-size: 3.7rem;
     letter-spacing: 0.08em;
   }
-  .header-actions {
-    gap: 8px;
-    padding-left: 8px;
-    font-size: 1.05rem;
+  .site-menu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .site-menu button {
+    font-size: 0.72rem;
   }
   .game-status strong {
     font-size: 0.7rem;
@@ -457,13 +577,13 @@ a:focus-visible {
     min-height: 190px;
   }
   .barista-banner img {
-    width: 50%;
+    width: 35%;
     height: 190px;
   }
   .barista-banner-copy {
     width: auto;
     flex: 1;
-    padding: 14px;
+    padding: 10px;
   }
   .barista-banner-copy span,
   .barista-banner-copy small {
@@ -471,7 +591,7 @@ a:focus-visible {
     letter-spacing: 0.1em;
   }
   .barista-banner-copy strong {
-    font-size: 1.65rem;
+    font-size: clamp(0.9rem, 4vw, 1.3rem);
   }
   .panel-overlay {
     align-items: flex-start;
