@@ -46,12 +46,13 @@ export function saveDisplayName(displayName: string): PlayerProgress {
 export function recordCompletedGame(
   gameKey: string,
   guesses: Guess[],
-  clueCount: number
+  clueCount: number,
+  awardsPoints = true
 ): PlayerProgress {
   const current = loadProgress();
   if (current.scoredGames.includes(gameKey)) return current;
 
-  const score = getGameScore(guesses, clueCount);
+  const score = awardsPoints ? getGameScore(guesses, clueCount) : 0;
   const won = guesses.some((guess) => guess.distance === 0);
   const bestDistance = Math.min(...guesses.map((guess) => guess.distance));
   const closeCall = !won && bestDistance <= 5000;

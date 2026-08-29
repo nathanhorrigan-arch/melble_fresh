@@ -45,7 +45,7 @@ export function useTodays(dayString: string): [
 
   useEffect(() => {
     const guesses = loadAllGuesses()[dayString] ?? [];
-    const suburb = getSuburb(dayString);
+    const suburb = getSuburbForDay(dayString);
 
     setTodays({ suburb, guesses });
   }, [dayString]);
@@ -64,9 +64,9 @@ export function useTodays(dayString: string): [
   return [todays, addGuess, randomAngle, imageScale];
 }
 
-function getSuburb(dayString: string): Suburb {
+export function getSuburbForDay(dayString: string): Suburb {
   if (dayString.startsWith("challenge-")) {
-    return getSuburb(dayString.slice("challenge-".length));
+    return getSuburbForDay(dayString.slice("challenge-".length));
   }
   if (dayString.startsWith("practice-")) {
     const index = Math.floor(

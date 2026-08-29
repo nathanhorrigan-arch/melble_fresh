@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { supabase } from "../../lib/supabase";
 import { Panel } from "./Panel";
+import { StatsContent } from "./Stats";
 
 interface HistoryProps {
   isOpen: boolean;
@@ -48,7 +49,7 @@ export function History({ isOpen, close }: HistoryProps) {
   }, [isOpen, session?.user]);
 
   const totalPoints = results.reduce(
-    (total, result) => total + result.score,
+    (total, result) => total + (result.mode === "daily" ? result.score : 0),
     0
   );
   const solvedGames = results.filter((result) => result.solved).length;
@@ -80,6 +81,8 @@ export function History({ isOpen, close }: HistoryProps) {
             <HistoryStat label="Solved" value={solvedGames} />
             <HistoryStat label="Points" value={totalPoints} />
           </div>
+          <StatsContent />
+          <h3 className="history-results-title">Completed games</h3>
           <div className="history-list">
             {results.map((result) => (
               <article className="history-row" key={result.id}>
@@ -97,7 +100,11 @@ export function History({ isOpen, close }: HistoryProps) {
                       : formatDistance(result.closest_distance_m)}
                   </small>
                 </div>
-                <b>+{result.score} PTS</b>
+                <b>
+                  {result.mode === "daily"
+                    ? `+${result.score} PTS`
+                    : "NO POINTS"}
+                </b>
               </article>
             ))}
           </div>

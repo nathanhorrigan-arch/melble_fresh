@@ -17,25 +17,29 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
     <Panel title="How to play" isOpen={isOpen} close={close}>
       <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
         <div>
-          Guess the <MelBurb /> in 6 guesses.
+          A mystery Melbourne suburb has just landed on the café counter. Read
+          its outline and name it before your six guesses run out.
         </div>
         <div>
-          Each guess must be a valid suburb of Melbourne (not including
-          localities)
+          Start typing a suburb and choose one from the list. MelBurb accepts
+          Greater Melbourne suburbs included in the game, rather than smaller
+          localities.
         </div>
         <div>
-          After each guess, you will have the distance, the direction and the
-          proximity from your guess to the target location.
+          Every guess comes back with three clues: how far away it is, which
+          direction to travel, and a proximity percentage. Follow the trail
+          until you reach the mystery <MelBurb />.
         </div>
         <div>
-          An exact answer is worth 100 points. If you do not solve the suburb,
-          your closest guess can still earn 75 points within 1 km, 50 within 3
-          km, or 25 within 5 km. Guesses farther than 5 km earn no distance
-          points. Barista clues deduct 10 points each.
+          Name it exactly to collect 100 points. If the answer escapes you, your
+          nearest guess still earns 75 points at 1 km or closer, 50 at 3 km or
+          closer, or 25 at 5 km or closer. Anything farther earns no points, and
+          each Barista clue deducts 10 points.
         </div>
         <div>
-          Play the shared Daily puzzle, practise as often as you like, or send a
-          finished puzzle to a friend as a challenge.
+          Visit Daily for the shared puzzle of the day, open Practice for
+          unlimited extra rounds, or pass a completed puzzle to a friend as a
+          challenge.
         </div>
       </div>
       <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
@@ -45,18 +49,17 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
             rowCount={1}
             guesses={[
               {
-                name: "Melbourne",
-                direction: "E",
-                distance: 8_000,
+                name: "St Kilda",
+                direction: "N",
+                distance: 7_000,
               },
             ]}
             settingsData={settingsData}
           />
           <div className="my-2">
-            Your guess <span className="uppercase font-bold">Melbourne</span> is{" "}
-            {formatDistance(8_000)} away from the target location, the target
-            location is in the Eastern direction and you have 88% of proximity
-            because it&apos;s relatively close.
+            You order <span className="uppercase font-bold">St Kilda</span>, but
+            the mystery suburb is {formatDistance(7_000)} to the north. The
+            arrow gives you a direction for your next move.
           </div>
         </div>
         <div>
@@ -64,17 +67,17 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
             rowCount={1}
             guesses={[
               {
-                name: "Malvern",
-                direction: "E",
-                distance: 4_000,
+                name: "Richmond",
+                direction: "NW",
+                distance: 3_000,
               },
             ]}
             settingsData={settingsData}
           />
           <div className="my-2">
-            Your second guess{" "}
-            <span className="uppercase font-bold">Malvern</span> is getting
-            closer! {formatDistance(4_000)} away, Easterly direction and 94%!
+            Next comes <span className="uppercase font-bold">Richmond</span>. At{" "}
+            {formatDistance(3_000)} away, you are getting warmer; head
+            north-west to close the gap.
           </div>
         </div>
         <div>
@@ -82,7 +85,7 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
             rowCount={1}
             guesses={[
               {
-                name: "Glen Iris",
+                name: "Fitzroy",
                 direction: "N",
                 distance: 0,
               },
@@ -90,8 +93,8 @@ export function Infos({ isOpen, close, settingsData }: InfosProps) {
             settingsData={settingsData}
           />
           <div className="my-2">
-            Next guess, <span className="uppercase font-bold">Glen Iris</span>,
-            it&apos;s the location to guess! Congrats!{" "}
+            <span className="uppercase font-bold">Fitzroy</span> is the perfect
+            pour: the distance reaches zero and the suburb is solved!{" "}
             <Twemoji text="🎉" options={{ className: "inline-block" }} />
           </div>
         </div>

@@ -5,6 +5,7 @@ describe("cloud progress", () => {
     const results: GameResult[] = [
       {
         game_key: "2026-08-28",
+        mode: "daily",
         score: 100,
         guesses_count: 1,
         closest_distance_m: 0,
@@ -12,6 +13,7 @@ describe("cloud progress", () => {
       },
       {
         game_key: "practice-1",
+        mode: "practice",
         score: 50,
         guesses_count: 6,
         closest_distance_m: 2200,
@@ -21,7 +23,7 @@ describe("cloud progress", () => {
 
     expect(progressFromResults(results, "Laneway Local")).toEqual({
       displayName: "Laneway Local",
-      totalPoints: 150,
+      totalPoints: 100,
       completedGames: 2,
       closeCalls: 1,
       achievements: ["First brew", "First sip", "So close!"],
@@ -31,7 +33,8 @@ describe("cloud progress", () => {
 
   it("unlocks regular and points achievements from cloud history", () => {
     const results: GameResult[] = Array.from({ length: 5 }, (_, index) => ({
-      game_key: `practice-${index + 1}`,
+      game_key: `2026-08-${String(index + 1).padStart(2, "0")}`,
+      mode: "daily",
       score: 100,
       guesses_count: 2,
       closest_distance_m: 0,

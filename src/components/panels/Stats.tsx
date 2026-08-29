@@ -11,6 +11,16 @@ interface StatsProps {
 
 export function Stats({ isOpen, close }: StatsProps) {
   const { t } = useTranslation();
+
+  return (
+    <Panel title={t("stats.title")} isOpen={isOpen} close={close}>
+      <StatsContent />
+    </Panel>
+  );
+}
+
+export function StatsContent() {
+  const { t } = useTranslation();
   const {
     played,
     winRatio,
@@ -20,9 +30,12 @@ export function Stats({ isOpen, close }: StatsProps) {
     guessDistribution,
   } = getStatsData();
 
-  const maxDistribution = Math.max(...Object.values(guessDistribution));
+  const maxDistribution = Math.max(...Object.values(guessDistribution)) || 1;
   return (
-    <Panel title={t("stats.title")} isOpen={isOpen} close={close}>
+    <div className="history-statistics">
+      <h3 className="text-xl font-bold uppercase tracking-wider">
+        {t("stats.title")}
+      </h3>
       <div className="flex justify-center">
         <StatsTile value={played} name={t("stats.played")} />
         <StatsTile value={Math.round(winRatio * 100)} name={t("stats.win")} />
@@ -56,7 +69,7 @@ export function Stats({ isOpen, close }: StatsProps) {
           ))}
         </ul>
       </div>
-    </Panel>
+    </div>
   );
 }
 
