@@ -1,6 +1,6 @@
 # ME**L**BU**R**B
 
-Play MelBurb here: <https://nathanhorrigan-arch.github.io/melble_fresh/>.
+Play MelBurb here: <https://www.melburb.com/>.
 
 ## Development
 
@@ -25,7 +25,7 @@ npm run build
 ## Publishing
 
 The website is published with GitHub Pages at
-<https://nathanhorrigan-arch.github.io/melble_fresh/>.
+<https://www.melburb.com/>.
 
 When a change is merged into `main`, GitHub Actions checks the code, builds the
 production website, and publishes it automatically. GitHub Pages must use

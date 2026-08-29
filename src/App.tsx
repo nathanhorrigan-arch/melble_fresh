@@ -6,9 +6,9 @@ import { Infos } from "./components/panels/Infos";
 import { Settings } from "./components/panels/Settings";
 import { useSettings } from "./hooks/useSettings";
 import { Stats } from "./components/panels/Stats";
-import Twemoji from "./components/Twemoji";
 import { Profile } from "./components/panels/Profile";
 import { loadProgress, PlayerProgress } from "./domain/progress";
+import { History } from "./components/panels/History";
 
 export type GameMode = "daily" | "practice" | "challenge";
 
@@ -17,6 +17,9 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(
+    () => window.location.hash === "#history"
+  );
   const [progress, setProgress] = useState<PlayerProgress>(() =>
     loadProgress()
   );
@@ -35,6 +38,24 @@ export default function App() {
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
+
+  useEffect(() => {
+    const openHistoryFromHash = () =>
+      setHistoryOpen(window.location.hash === "#history");
+    window.addEventListener("hashchange", openHistoryFromHash);
+    return () => window.removeEventListener("hashchange", openHistoryFromHash);
+  }, []);
+
+  const closeHistory = () => {
+    setHistoryOpen(false);
+    if (window.location.hash === "#history") {
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}`
+      );
+    }
+  };
 
   return (
     <>
@@ -66,42 +87,13 @@ export default function App() {
         progress={progress}
         onChange={setProgress}
       />
+      <History isOpen={historyOpen} close={closeHistory} />
       <div className="cafe-world flex justify-center flex-auto text-stone-100">
         <div className="w-full flex flex-col cafe-game-shell">
           <header className="cafe-header px-3">
             <h1 className="pixel-title text-center my-2">
               ME<span>L</span>BU<span>R</span>B
             </h1>
-            <div className="header-actions">
-              <button
-                type="button"
-                onClick={() => setInfoOpen(true)}
-                aria-label="How to play"
-              >
-                <Twemoji text="❓" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setProfileOpen(true)}
-                aria-label="Player card"
-              >
-                <Twemoji text="☕" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setStatsOpen(true)}
-                aria-label="Statistics"
-              >
-                <Twemoji text="📈" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setSettingsOpen(true)}
-                aria-label="Settings"
-              >
-                <Twemoji text="⚙️" />
-              </button>
-            </div>
           </header>
           <section className="barista-banner" aria-label="MelBurb café barista">
             <img
@@ -109,11 +101,28 @@ export default function App() {
               alt="An 8-bit barista making coffee at a Melbourne café"
             />
             <div className="barista-banner-copy">
-              <span>FRESHLY BREWED</span>
+              <span>FRESHLY BREWED DAILY</span>
               <strong>ONE MELBOURNE SUBURB</strong>
               <small>CAN YOU NAME IT?</small>
             </div>
           </section>
+          <nav className="site-menu" aria-label="Player menu">
+            <button type="button" onClick={() => setInfoOpen(true)}>
+              How to Play
+            </button>
+            <button type="button" onClick={() => setProfileOpen(true)}>
+              Login / Register
+            </button>
+            <button type="button" onClick={() => setHistoryOpen(true)}>
+              Game History
+            </button>
+            <button type="button" onClick={() => setStatsOpen(true)}>
+              Statistics
+            </button>
+            <button type="button" onClick={() => setSettingsOpen(true)}>
+              Settings
+            </button>
+          </nav>
           <nav className="mode-switcher" aria-label="Game mode">
             <button
               className={gameMode === "daily" ? "active" : ""}
