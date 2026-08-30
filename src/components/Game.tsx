@@ -20,6 +20,23 @@ import { synchronizeCompletedGame } from "../domain/cloudProgress";
 
 const ENABLE_TWITCH_LINK = false;
 const MAX_TRY_COUNT = 6;
+const RETRY_PROMPTS = [
+  "One coffee down, time for another cafe - where to?",
+  "That cafe was a decoy - which suburb is brewing next?",
+  "Wrong tram stop - where should we grab the next coffee?",
+  "Espresso yourself - which suburb will you try now?",
+  "Last sip - choose your final suburb carefully!",
+];
+
+function getGuessPlaceholder(guessCount: number) {
+  if (guessCount === 0) return "Start your guess here...";
+
+  const guessesLeft = MAX_TRY_COUNT - guessCount;
+  const prompt =
+    RETRY_PROMPTS[Math.min(guessCount - 1, RETRY_PROMPTS.length - 1)];
+  const guessLabel = guessesLeft === 1 ? "guess" : "guesses";
+  return `${prompt} ${guessesLeft} ${guessLabel} left.`;
+}
 
 interface GameProps {
   settingsData: SettingsData;
@@ -443,11 +460,7 @@ export function Game({
                   inputRef={suburbInputRef}
                   currentGuess={currentGuess}
                   setCurrentGuess={setCurrentGuess}
-                  placeholder={
-                    guesses.length === 0
-                      ? "Start your guess here..."
-                      : "Try another suburb..."
-                  }
+                  placeholder={getGuessPlaceholder(guesses.length)}
                 />
                 <button
                   className="rounded font-bold p-3 flex items-center justify-center border-2 uppercase my-0.5 w-full bg-amber-500 text-stone-950 hover:bg-amber-400 active:bg-amber-600 border-amber-600 transition-colors text-xl sm:text-2xl"
