@@ -4,7 +4,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { supabase } from "../../lib/supabase";
 import { synchronizeLocalHistory } from "../../domain/cloudProgress";
 import { Panel } from "./Panel";
-import Twemoji from "../Twemoji";
 
 interface ProfileProps {
   isOpen: boolean;
@@ -171,62 +170,6 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
                   : "Sign in"}
               </button>
             </form>
-          </div>
-
-          <div className="mb-5">
-            <p className="text-sm text-slate-600 dark:text-stone-300 mb-2 text-center">
-              Or continue with
-            </p>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={async () => {
-                  setSubmitting(true);
-                  try {
-                    await supabase.auth.signInWithOAuth({
-                      provider: "google",
-                      options: {
-                        redirectTo: `${window.location.origin}/`,
-                      },
-                    });
-                  } catch (err) {
-                    setSubmitting(false);
-                    if (err instanceof Error) {
-                      setMessage(err.message);
-                    } else {
-                      setMessage("An unknown error occurred");
-                    }
-                  }
-                }}
-                disabled={submitting}
-                className="w-full flex items-center justify-center cafe-button bg-gray-800 hover:bg-gray-700"
-              >
-                <Twemoji text="🔍" className="mr-2" /> Continue with Google
-              </button>
-              <button
-                onClick={async () => {
-                  setSubmitting(true);
-                  try {
-                    await supabase.auth.signInWithOAuth({
-                      provider: "apple",
-                      options: {
-                        redirectTo: `${window.location.origin}/`,
-                      },
-                    });
-                  } catch (err) {
-                    setSubmitting(false);
-                    if (err instanceof Error) {
-                      setMessage(err.message);
-                    } else {
-                      setMessage("An unknown error occurred");
-                    }
-                  }
-                }}
-                disabled={submitting}
-                className="w-full flex items-center justify-center cafe-button bg-black text-white hover:bg-gray-800"
-              >
-                <Twemoji text="🍎" className="mr-2" /> Continue with Apple
-              </button>
-            </div>
           </div>
         </>
       )}
