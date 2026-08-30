@@ -271,30 +271,6 @@ export function Game({
           <strong>PERFECT POUR!</strong>
         </div>
       )}
-      <div className="game-status">
-        <div>
-          <span className="status-label">MODE</span>
-          <strong>{gameMode.toUpperCase()}</strong>
-        </div>
-        <div>
-          <span className="status-label">TABLE</span>
-          <strong>
-            {gameMode === "daily"
-              ? `#${dayCount(dailyKey)}`
-              : gameMode === "practice"
-              ? practiceRound
-              : "FRIEND"}
-          </strong>
-        </div>
-        {awardsPoints && (
-          <div>
-            <span className="status-label">POT</span>
-            <strong aria-live="polite">
-              {Math.max(25, 100 - revealedClues.length * 10)} PTS
-            </strong>
-          </div>
-        )}
-      </div>
       {hideImageMode && !gameEnded && (
         <button
           className="font-bold border-2 p-1 rounded uppercase my-2 hover:bg-gray-50 active:bg-gray-100 dark:hover:bg-slate-800 dark:active:bg-slate-700"
@@ -472,43 +448,63 @@ export function Game({
                   setCurrentGuess={setCurrentGuess}
                 />
                 <button
-                  className="rounded font-bold p-1 flex items-center justify-center border-2 uppercase my-0.5 hover:bg-gray-50 active:bg-gray-100 dark:hover:bg-slate-800 dark:active:bg-slate-700"
+                  className="rounded font-bold p-3 flex items-center justify-center border-2 uppercase my-0.5 w-full bg-amber-500 text-stone-950 hover:bg-amber-400 active:bg-amber-600 border-amber-600 transition-colors text-xl sm:text-2xl"
                   type="submit"
                 >
                   <Twemoji
                     text="☕"
                     options={{ className: "inline-block" }}
-                    className="flex items-center justify-center"
-                  />{" "}
-                  <span className="ml-1">{t("guess")}</span>
+                    className="flex items-center justify-center mr-3"
+                  />
+                  <span>{t("guess")}</span>
+                  <Twemoji
+                    text="☕"
+                    options={{ className: "inline-block" }}
+                    className="flex items-center justify-center ml-3"
+                  />
                 </button>
               </div>
             </form>
             {suburb && (
-              <section className="clue-board">
-                <div className="flex items-center justify-between mb-2">
-                  <h2>BARISTA CLUES</h2>
-                  <span>
-                    {awardsPoints ? "-10 points each" : "Free in practice"}
-                  </span>
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {clueText.map((clue, index) => (
-                    <button
-                      key={clue}
-                      type="button"
-                      onClick={() => revealClue(index)}
-                      className={
-                        revealedClues.includes(index) ? "revealed" : ""
-                      }
+              <div className="flex gap-3 my-2">
+                <section className="clue-board flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <h2>BARISTA CLUES</h2>
+                    <span>
+                      {awardsPoints ? "-10 points each" : "Free in practice"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {clueText.map((clue, index) => (
+                      <button
+                        key={clue}
+                        type="button"
+                        onClick={() => revealClue(index)}
+                        className={
+                          revealedClues.includes(index) ? "revealed" : ""
+                        }
+                      >
+                        {revealedClues.includes(index)
+                          ? clue
+                          : `Clue ${index + 1}`}
+                      </button>
+                    ))}
+                  </div>
+                </section>
+                {awardsPoints && (
+                  <div className="clue-board flex-shrink-0 w-36 text-center">
+                    <div className="flex items-center justify-between mb-2">
+                      <h2>POT</h2>
+                    </div>
+                    <strong
+                      aria-live="polite"
+                      className="text-xl font-bold text-amber-400"
                     >
-                      {revealedClues.includes(index)
-                        ? clue
-                        : `Clue ${index + 1}`}
-                    </button>
-                  ))}
-                </div>
-              </section>
+                      {Math.max(25, 100 - revealedClues.length * 10)} PTS
+                    </strong>
+                  </div>
+                )}
+              </div>
             )}
           </>
         )}
