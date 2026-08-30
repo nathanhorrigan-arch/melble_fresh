@@ -48,10 +48,14 @@ a:focus-visible {
   width: min(calc(100% - 48px), 1280px);
   min-height: 100vh;
   margin-inline: auto;
-  border-right: 3px solid #3e281f;
-  border-left: 3px solid #3e281f;
   background: rgba(12, 9, 8, 0.94);
   box-shadow: 0 0 42px rgba(0, 0, 0, 0.72);
+}
+
+.cafe-game-content {
+  border-right: 3px solid #3e281f;
+  border-left: 3px solid #3e281f;
+  margin-top: 4rem;
 }
 
 .cafe-header {
@@ -203,6 +207,7 @@ a:focus-visible {
   align-items: stretch;
   min-height: 220px;
   overflow: hidden;
+  border-top: 3px solid #3e281f;
   border-bottom: 4px solid var(--brick);
   background: linear-gradient(
       90deg,
@@ -242,15 +247,15 @@ a:focus-visible {
 .barista-banner-copy > span,
 .barista-banner-copy > small {
   color: var(--gumleaf);
-  font-size: 1.44rem;
+  font-size: 1rem;
   font-weight: 900;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
 }
 
 .barista-banner-copy strong {
   margin: 4px 0;
   color: var(--crema);
-  font-size: clamp(1.75rem, 3.4vw, 3.4rem);
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
   line-height: 1.15;
   white-space: nowrap;
   text-shadow: 3px 3px 0 #6d3325;
@@ -409,7 +414,7 @@ a:focus-visible {
 
 .guess-entry-field {
   border: 4px solid var(--amber);
-  background: #080605;
+  background: var(--amber);
   box-shadow: 0 0 0 3px rgba(255, 190, 63, 0.18),
     0 0 18px rgba(255, 190, 63, 0.2);
   transition: border-color 120ms ease, box-shadow 120ms ease;
@@ -422,10 +427,13 @@ a:focus-visible {
 }
 
 .guess-entry-input {
-  min-height: 58px;
-  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  min-height: 64px;
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
   font-weight: 800;
   letter-spacing: 0.04em;
+  background: transparent;
+  color: #080605;
+  width: 100%;
 }
 
 .guess-entry-input::placeholder {
@@ -488,25 +496,25 @@ a:focus-visible {
   margin-top: 12px;
   border: 2px dashed #735941;
   background: #15110d;
-  padding: 10px;
+  padding: 8px;
 }
 
 .clue-board h2 {
   color: var(--amber);
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.12em;
 }
 .clue-board span {
   color: #9f8b79;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
 }
 .clue-board button {
-  min-height: 48px;
+  min-height: 36px;
   border: 1px solid #765b49;
-  padding: 5px;
+  padding: 4px;
   color: #d8c8b4;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
 }
 .clue-board button.revealed {
   background: #263d2d;

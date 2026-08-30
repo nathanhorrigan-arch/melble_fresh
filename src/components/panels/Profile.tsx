@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { supabase } from "../../lib/supabase";
 import { synchronizeLocalHistory } from "../../domain/cloudProgress";
 import { Panel } from "./Panel";
+import Twemoji from "../Twemoji";
 
 interface ProfileProps {
   isOpen: boolean;
@@ -113,57 +114,125 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
           </button>
         </div>
       ) : (
-        <form className="account-form mb-5" onSubmit={handleAuthentication}>
-          <div className="account-tabs" role="tablist" aria-label="Account">
-            <button
-              className={authMode === "signin" ? "active" : ""}
-              type="button"
-              onClick={() => setAuthMode("signin")}
-            >
-              Sign in
-            </button>
-            <button
-              className={authMode === "signup" ? "active" : ""}
-              type="button"
-              onClick={() => setAuthMode("signup")}
-            >
-              Create account
-            </button>
+        <>
+          <div className="account-form mb-5">
+            <div className="account-tabs" role="tablist" aria-label="Account">
+              <button
+                className={authMode === "signin" ? "active" : ""}
+                type="button"
+                onClick={() => setAuthMode("signin")}
+              >
+                Sign in
+              </button>
+              <button
+                className={authMode === "signup" ? "active" : ""}
+                type="button"
+                onClick={() => setAuthMode("signup")}
+              >
+                Create account
+              </button>
+            </div>
+            <p className="text-sm text-slate-600 dark:text-stone-300 mb-3">
+              {authMode === "signup"
+                ? "Create an account to keep your player identity across devices."
+                : "Sign in to reconnect your MelBurb player card."}
+            </p>
+            <form onSubmit={handleAuthentication}>
+              <label htmlFor="account-email">Email</label>
+              <input
+                id="account-email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+              <label htmlFor="account-password">Password</label>
+              <input
+                id="account-password"
+                type="password"
+                autoComplete={
+                  authMode === "signup" ? "new-password" : "current-password"
+                }
+                minLength={8}
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+              <button
+                className="cafe-button w-full"
+                type="submit"
+                disabled={submitting}
+              >
+                {submitting
+                  ? "Please wait…"
+                  : authMode === "signup"
+                  ? "Create account"
+                  : "Sign in"}
+              </button>
+            </form>
           </div>
-          <p className="text-sm text-slate-600 dark:text-stone-300">
-            {authMode === "signup"
-              ? "Create an account to keep your player identity across devices."
-              : "Sign in to reconnect your MelBurb player card."}
-          </p>
-          <label htmlFor="account-email">Email</label>
-          <input
-            id="account-email"
-            type="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <label htmlFor="account-password">Password</label>
-          <input
-            id="account-password"
-            type="password"
-            autoComplete={
-              authMode === "signup" ? "new-password" : "current-password"
-            }
-            minLength={8}
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <button className="cafe-button" type="submit" disabled={submitting}>
-            {submitting
-              ? "Please wait…"
-              : authMode === "signup"
-              ? "Create account"
-              : "Sign in"}
-          </button>
-        </form>
+
+          <div className="mb-5">
+            <p className="text-sm text-slate-600 dark:text-stone-300 mb-2 text-center">
+              Or continue with
+            </p>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={async () => {
+                  setSubmitting(true);
+                  try {
+                    await supabase.auth.signInWithOAuth({
+                      provider: "google",
+                      options: {
+                        redirectTo: `${window.location.origin}/auth/callback`,
+                        queryParams: {
+                          access_type: "offline",
+                          prompt: "consent",
+                        },
+                      },
+                    });
+                  } catch (err) {
+                    setSubmitting(false);
+                    if (err instanceof Error) {
+                      setMessage(err.message);
+                    } else {
+                      setMessage("An unknown error occurred");
+                    }
+                  }
+                }}
+                disabled={submitting}
+                className="w-full flex items-center justify-center cafe-button bg-gray-800 hover:bg-gray-700"
+              >
+                <Twemoji text="🔍" className="mr-2" /> Continue with Google
+              </button>
+              <button
+                onClick={async () => {
+                  setSubmitting(true);
+                  try {
+                    await supabase.auth.signInWithOAuth({
+                      provider: "apple",
+                      options: {
+                        redirectTo: `${window.location.origin}/auth/callback`,
+                      },
+                    });
+                  } catch (err) {
+                    setSubmitting(false);
+                    if (err instanceof Error) {
+                      setMessage(err.message);
+                    } else {
+                      setMessage("An unknown error occurred");
+                    }
+                  }
+                }}
+                disabled={submitting}
+                className="w-full flex items-center justify-center cafe-button bg-black text-white hover:bg-gray-800"
+              >
+                <Twemoji text="🍎" className="mr-2" /> Continue with Apple
+              </button>
+            </div>
+          </div>
+        </>
       )}
       {message && <p className="account-message mb-4">{message}</p>}
       <label className="block font-bold mb-1" htmlFor="display-name">

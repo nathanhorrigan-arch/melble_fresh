@@ -25,9 +25,7 @@ export default function App() {
   const challengeSeed = new URLSearchParams(window.location.search).get(
     "challenge"
   );
-  const [gameMode, setGameMode] = useState<GameMode>(
-    challengeSeed ? "challenge" : "daily"
-  );
+  const gameMode: GameMode = challengeSeed ? "challenge" : "daily";
   const [practiceRound, setPracticeRound] = useState(() =>
     Number(localStorage.getItem("melble-practice-round") || "1")
   );
@@ -88,78 +86,61 @@ export default function App() {
       <History isOpen={historyOpen} close={closeHistory} />
       <div className="cafe-world flex justify-center flex-auto text-stone-100">
         <div className="w-full flex flex-col cafe-game-shell">
-          <section className="barista-banner" aria-label="MelBurb café barista">
-            <img
-              src={`${process.env.PUBLIC_URL}/images/cafe/melburb-barista.gif`}
-              alt="An 8-bit barista making coffee at a Melbourne café"
+          <div className="cafe-game-content">
+            <section
+              className="barista-banner"
+              aria-label="MelBurb café barista"
+            >
+              <img
+                src={`${process.env.PUBLIC_URL}/images/cafe/melburb-barista.gif`}
+                alt="An 8-bit barista making coffee at a Melbourne café"
+              />
+              <div className="barista-banner-copy">
+                <h1 className="pixel-title barista-title">
+                  ME<span>L</span>BU<span>R</span>B
+                </h1>
+                <span>FRESHLY BREWED DAILY</span>
+                <strong>ONE MELBOURNE SUBURB</strong>
+                <small>CAN YOU NAME IT?</small>
+              </div>
+              <nav className="site-menu" aria-label="Player menu">
+                <button type="button" onClick={() => setInfoOpen(true)}>
+                  How to Play
+                </button>
+                <button type="button" onClick={() => setProfileOpen(true)}>
+                  Login / Register
+                </button>
+                <button type="button" onClick={() => setHistoryOpen(true)}>
+                  Game History
+                </button>
+                <button type="button" onClick={() => setSettingsOpen(true)}>
+                  Settings
+                </button>
+              </nav>
+            </section>
+            <Game
+              settingsData={settingsData}
+              updateSettings={updateSettings}
+              gameMode={gameMode}
+              practiceRound={practiceRound}
+              challengeSeed={challengeSeed || undefined}
+              onProgress={setProgress}
+              onNextPractice={() => {
+                const next = practiceRound + 1;
+                localStorage.setItem("melble-practice-round", String(next));
+                setPracticeRound(next);
+              }}
             />
-            <div className="barista-banner-copy">
-              <h1 className="pixel-title barista-title">
-                ME<span>L</span>BU<span>R</span>B
-              </h1>
-              <span>FRESHLY BREWED DAILY</span>
-              <strong>ONE MELBOURNE SUBURB</strong>
-              <small>CAN YOU NAME IT?</small>
-            </div>
-            <nav className="site-menu" aria-label="Player menu">
-              <button type="button" onClick={() => setInfoOpen(true)}>
-                How to Play
-              </button>
-              <button type="button" onClick={() => setProfileOpen(true)}>
-                Login / Register
-              </button>
-              <button type="button" onClick={() => setHistoryOpen(true)}>
-                Game History
-              </button>
-              <button type="button" onClick={() => setSettingsOpen(true)}>
-                Settings
-              </button>
-            </nav>
-          </section>
-          <nav className="mode-switcher" aria-label="Game mode">
-            <button
-              className={gameMode === "daily" ? "active" : ""}
-              onClick={() => setGameMode("daily")}
-            >
-              Daily
-            </button>
-            <button
-              className={gameMode === "practice" ? "active" : ""}
-              onClick={() => setGameMode("practice")}
-            >
-              Practice
-            </button>
-            {challengeSeed && (
-              <button
-                className={gameMode === "challenge" ? "active" : ""}
-                onClick={() => setGameMode("challenge")}
-              >
-                Challenge
-              </button>
-            )}
-          </nav>
-          <Game
-            settingsData={settingsData}
-            updateSettings={updateSettings}
-            gameMode={gameMode}
-            practiceRound={practiceRound}
-            challengeSeed={challengeSeed || undefined}
-            onProgress={setProgress}
-            onNextPractice={() => {
-              const next = practiceRound + 1;
-              localStorage.setItem("melble-practice-round", String(next));
-              setPracticeRound(next);
-            }}
-          />
-          <footer className="cafe-credit">
-            <Twemoji text="☕" className="cafe-credit-icon" />
-            <p>
-              We&apos;re shouting a coffee to the original Melble GitHub brew,
-              the Worldle fork that inspired this site — with a tip of the
-              beanie to Wordle creator Josh Wardle.
-            </p>
-            <Twemoji text="☕" className="cafe-credit-icon" />
-          </footer>
+            <footer className="cafe-credit">
+              <Twemoji text="☕" className="cafe-credit-icon" />
+              <p>
+                We&apos;re shouting a coffee to the original Melble GitHub brew,
+                the Worldle fork that inspired this site — with a tip of the
+                beanie to Wordle creator Josh Wardle.
+              </p>
+              <Twemoji text="☕" className="cafe-credit-icon" />
+            </footer>
+          </div>
         </div>
       </div>
     </>
