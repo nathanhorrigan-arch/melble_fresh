@@ -21,11 +21,11 @@ import { synchronizeCompletedGame } from "../domain/cloudProgress";
 const ENABLE_TWITCH_LINK = false;
 const MAX_TRY_COUNT = 6;
 const RETRY_PROMPTS = [
-  "One coffee down, time for another cafe - where to?",
-  "That cafe was a decoy - which suburb is brewing next?",
-  "Wrong tram stop - where should we grab the next coffee?",
-  "Espresso yourself - which suburb will you try now?",
-  "Last sip - choose your final suburb carefully!",
+  "Coffee down. Where next?",
+  "Cafe miss - try again.",
+  "Wrong tram stop.",
+  "Another sip. Where next?",
+  "Last cup - choose wisely!",
 ];
 
 function getGuessPlaceholder(guessCount: number) {

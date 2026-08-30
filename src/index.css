@@ -426,9 +426,9 @@ a:focus-visible {
 
 .guess-entry-input {
   min-height: 64px;
-  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  font-size: clamp(0.8rem, 1.8vw, 1.15rem);
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.015em;
   background: #080605;
   color: var(--crema);
   width: 100%;
