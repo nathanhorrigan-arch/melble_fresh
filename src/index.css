@@ -413,31 +413,29 @@ a:focus-visible {
 }
 
 .guess-entry-field {
-  border: 4px solid var(--amber);
-  background: var(--amber);
-  box-shadow: 0 0 0 3px rgba(255, 190, 63, 0.18),
-    0 0 18px rgba(255, 190, 63, 0.2);
+  border: 4px solid #65483f;
+  background: #080605;
+  box-shadow: 3px 3px 0 rgba(62, 40, 31, 0.7);
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .guess-entry-field:focus-within {
   border-color: var(--crema);
-  box-shadow: 0 0 0 4px rgba(255, 226, 174, 0.28),
-    0 0 24px rgba(255, 190, 63, 0.42);
+  box-shadow: 0 0 0 3px rgba(255, 226, 174, 0.18);
 }
 
 .guess-entry-input {
   min-height: 64px;
-  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  font-size: clamp(0.8rem, 1.8vw, 1.15rem);
   font-weight: 800;
-  letter-spacing: 0.04em;
-  background: transparent;
-  color: #080605;
+  letter-spacing: 0.015em;
+  background: #080605;
+  color: var(--crema);
   width: 100%;
 }
 
 .guess-entry-input::placeholder {
-  color: #d7c8b7;
+  color: #b8ada2;
   opacity: 1;
 }
 
