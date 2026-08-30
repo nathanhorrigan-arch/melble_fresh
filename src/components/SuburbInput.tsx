@@ -40,7 +40,7 @@ export function SuburbInput({
       onSuggestionsClearRequested={() => setSuggestions([])}
       getSuggestionValue={(suggestion) => suggestion}
       renderSuggestion={(suggestion) => (
-        <div className="m-0.5 bg-white dark:bg-slate-800 dark:text-slate-100 p-1 cursor-pointer">
+        <div className="m-0.5 bg-black text-white p-1 cursor-pointer">
           {suggestion}
         </div>
       )}
@@ -59,7 +59,7 @@ export function SuburbInput({
       renderSuggestionsContainer={({ containerProps, children }) => (
         <div
           {...containerProps}
-          className={`${containerProps.className} rounded absolute bottom-full w-full bg-gray-300 dark:bg-white mb-1 divide-x-2 max-h-52 overflow-auto`}
+          className={`${containerProps.className} rounded absolute bottom-full w-full bg-black text-white mb-1 max-h-52 overflow-auto`}
         >
           {children}
         </div>
