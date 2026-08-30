@@ -185,11 +185,7 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
                     await supabase.auth.signInWithOAuth({
                       provider: "google",
                       options: {
-                        redirectTo: `${window.location.origin}/auth/callback`,
-                        queryParams: {
-                          access_type: "offline",
-                          prompt: "consent",
-                        },
+                        redirectTo: `${window.location.origin}/`,
                       },
                     });
                   } catch (err) {
@@ -213,7 +209,7 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
                     await supabase.auth.signInWithOAuth({
                       provider: "apple",
                       options: {
-                        redirectTo: `${window.location.origin}/auth/callback`,
+                        redirectTo: `${window.location.origin}/`,
                       },
                     });
                   } catch (err) {
