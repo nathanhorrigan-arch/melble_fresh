@@ -1,4 +1,3 @@
-import { t } from "i18next";
 import React, { useState } from "react";
 import Autosuggest from "react-autosuggest";
 import { useTranslation } from "react-i18next";
@@ -9,12 +8,14 @@ interface SuburbInputProps {
   inputRef: React.RefObject<HTMLInputElement>;
   currentGuess: string;
   setCurrentGuess: (guess: string) => void;
+  placeholder: string;
 }
 
 export function SuburbInput({
   inputRef,
   currentGuess,
   setCurrentGuess,
+  placeholder,
 }: SuburbInputProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
@@ -51,7 +52,7 @@ export function SuburbInput({
         id: "suburb-guess",
         className:
           "guess-entry-input w-full bg-stone-950 text-stone-100 p-2 outline-none",
-        placeholder: t("placeholder"),
+        placeholder,
         value: currentGuess,
         onChange: (_e, { newValue }) => setCurrentGuess(newValue),
       }}

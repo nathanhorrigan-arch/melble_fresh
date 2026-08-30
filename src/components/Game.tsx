@@ -446,6 +446,11 @@ export function Game({
                   inputRef={suburbInputRef}
                   currentGuess={currentGuess}
                   setCurrentGuess={setCurrentGuess}
+                  placeholder={
+                    guesses.length === 0
+                      ? "Start your guess here..."
+                      : "Try another suburb..."
+                  }
                 />
                 <button
                   className="rounded font-bold p-3 flex items-center justify-center border-2 uppercase my-0.5 w-full bg-amber-500 text-stone-950 hover:bg-amber-400 active:bg-amber-600 border-amber-600 transition-colors text-xl sm:text-2xl"
