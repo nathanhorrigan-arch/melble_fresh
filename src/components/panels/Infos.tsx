@@ -1,8 +1,6 @@
 import { Guesses } from "../Guesses";
 import { Panel } from "./Panel";
 import React from "react";
-import { MelBurb } from "../MelBurb";
-import { formatDistance } from "../../domain/geography";
 import { SettingsData } from "../../hooks/useSettings";
 import Twemoji from "./../Twemoji";
 
