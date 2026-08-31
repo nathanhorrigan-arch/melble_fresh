@@ -362,94 +362,93 @@ export function Game({
       <div className="my-2">
         {gameEnded && suburb ? (
           <>
-            <div className="score-ticket">
-              <span>
-                {guesses.some((guess) => guess.distance === 0)
-                  ? "SUBURB FOUND"
-                  : gameScore
-                  ? "CLOSE CALL"
-                  : "NEXT COFFEE'S ON US"}
-              </span>
-              <strong>+{gameScore} POINTS</strong>
-              {!guesses.some((guess) => guess.distance === 0) &&
-                gameScore > 0 && (
-                  <small>
-                    Distance points awarded because the suburb was not guessed
-                    exactly.
-                  </small>
-                )}
-            </div>
-            <Share
-              guesses={guesses}
-              dayString={dayString}
-              settingsData={settingsData}
-              hideImageMode={hideImageMode}
-              rotationMode={rotationMode}
-            />
-            <div className="flex gap-2 mt-3">
-              <button
-                type="button"
-                className="cafe-button flex-1"
-                onClick={copyChallenge}
-              >
-                Challenge a friend
-              </button>
-              {gameMode === "practice" && (
-                <button
-                  type="button"
-                  className="cafe-button flex-1"
-                  onClick={onNextPractice}
-                >
-                  Next practice
-                </button>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a
-                className="underline text-center block mt-4 whitespace-nowrap"
-                href={`https://www.google.com/maps?q=${suburbName},+VIC&hl=${i18n.resolvedLanguage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Twemoji
-                  text={t("showOnGoogleMaps")}
-                  options={{ className: "inline-block" }}
-                />
-              </a>
-              <a
-                className="underline text-center block mt-4 whitespace-nowrap"
-                href={`https://${i18n.resolvedLanguage}.wikipedia.org/wiki/${suburbName},_Victoria`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Twemoji
-                  text={t("showOnWikipedia")}
-                  options={{ className: "inline-block" }}
-                />
-              </a>
-              <a
-                className="underline text-center block mt-4 whitespace-nowrap"
-                href={getBroadsheetSuburbUrl(suburbName)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ☕ Find cafés
-              </a>
-            </div>
-            {ENABLE_TWITCH_LINK && (
-              <div className="flex flex-wrap gap-4 justify-center">
-                <a
-                  className="underline text-center block mt-4 whitespace-nowrap"
-                  href="https://www.twitch.tv/t3uteuf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Twemoji
-                    text="More? Play on Twitch! 👾"
-                    options={{ className: "inline-block" }}
-                  />
-                </a>
+            {guesses.some((guess) => guess.distance === 0) ? (
+              <div className="suburb-revealed-card">
+                <div className="suburb-revealed-header">
+                  <span className="suburb-revealed-emoji">🎉</span>
+                  <span className="suburb-revealed-title">
+                    You got it, you found
+                  </span>
+                  <strong className="suburb-revealed-name">
+                    {suburbName}!
+                  </strong>
+                  <span className="suburb-revealed-points">
+                    +{gameScore} POINTS
+                  </span>
+                </div>
+                <div className="suburb-revealed-actions">
+                  <a
+                    className="suburb-revealed-action"
+                    href={`https://www.google.com/maps?q=${suburbName},+VIC&hl=${i18n.resolvedLanguage}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="block text-4xl">🗺️</span>
+                    <span className="text-sm">View {suburbName} on Maps</span>
+                  </a>
+                  <a
+                    className="suburb-revealed-action"
+                    href={`https://${i18n.resolvedLanguage}.wikipedia.org/wiki/${suburbName},_Victoria`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="block text-4xl">📖</span>
+                    <span className="text-sm">Read about {suburbName}</span>
+                  </a>
+                  <a
+                    className="suburb-revealed-action"
+                    href={getBroadsheetSuburbUrl(suburbName)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Twemoji
+                      text="☕"
+                      options={{ className: "block text-4xl" }}
+                    />
+                    <span className="text-sm">Find cafés in {suburbName}</span>
+                  </a>
+                </div>
               </div>
+            ) : (
+              <>
+                <div className="score-ticket">
+                  <span>
+                    {gameScore ? "CLOSE CALL" : "NEXT COFFEE'S ON US"}
+                  </span>
+                  <strong>+{gameScore} POINTS</strong>
+                  {gameScore > 0 && (
+                    <small>
+                      Distance points awarded because the suburb was not guessed
+                      exactly.
+                    </small>
+                  )}
+                </div>
+                <Share
+                  guesses={guesses}
+                  dayString={dayString}
+                  settingsData={settingsData}
+                  hideImageMode={hideImageMode}
+                  rotationMode={rotationMode}
+                />
+                <div className="flex gap-2 mt-3">
+                  <button
+                    type="button"
+                    className="cafe-button flex-1"
+                    onClick={copyChallenge}
+                  >
+                    Challenge a friend
+                  </button>
+                  {gameMode === "practice" && (
+                    <button
+                      type="button"
+                      className="cafe-button flex-1"
+                      onClick={onNextPractice}
+                    >
+                      Next practice
+                    </button>
+                  )}
+                </div>
+              </>
             )}
           </>
         ) : (
@@ -529,20 +528,14 @@ export function Game({
         <strong>{yesterdaySuburbName.toUpperCase()}</strong>
         <div>
           <a
-            href={getBroadsheetSuburbUrl(yesterdaySuburbName)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ☕ Browse cafés on Broadsheet
-          </a>
-          <a
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
               `${yesterdaySuburbName} cafés VIC`
             )}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            📍 Find cafés on Google Maps
+            <Twemoji text="☕" options={{ className: "inline-block" }} /> Find
+            cafés in {yesterdaySuburbName}
           </a>
         </div>
       </section>
@@ -551,12 +544,6 @@ export function Game({
 }
 
 function getBroadsheetSuburbUrl(suburbName: string): string {
-  const slug = suburbName
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[’']/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-  return `https://www.broadsheet.com.au/melbourne/${slug}`;
+  const encodedSuburb = encodeURIComponent(suburbName);
+  return `https://www.google.com/maps/search/coffee+shops+in+${encodedSuburb},+Victoria`;
 }

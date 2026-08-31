@@ -28,6 +28,7 @@ interface GlobalStats {
   dailyGames: number;
   dailySolved: number;
   dailyWinRate: number;
+  guessDistribution: Record<number, number>;
 }
 
 interface LeaderboardEntry {
@@ -322,6 +323,42 @@ export function Statistics({ isOpen, close }: StatisticsProps) {
                       label="Total Solved"
                       value={globalStats.totalSolved.toLocaleString()}
                     />
+                  </div>
+
+                  <div className="statistics-section">
+                    <h3 className="statistics-section-title">
+                      Guess Distribution
+                    </h3>
+                    <ul className="guess-distribution">
+                      {Object.entries(globalStats.guessDistribution).map(
+                        ([guess, count]) => (
+                          <li key={guess} className="guess-distribution-row">
+                            <span className="guess-number">{guess}</span>
+                            <div className="guess-bar-container">
+                              <div
+                                className="guess-bar"
+                                style={{
+                                  width: `${
+                                    Math.round(
+                                      (count /
+                                        Math.max(
+                                          ...Object.values(
+                                            globalStats.guessDistribution
+                                          )
+                                        )) *
+                                        100
+                                    ) || 0
+                                  }%`,
+                                }}
+                              />
+                            </div>
+                            <span className="guess-count">
+                              {count.toLocaleString()}
+                            </span>
+                          </li>
+                        )
+                      )}
+                    </ul>
                   </div>
                 </div>
               ) : (

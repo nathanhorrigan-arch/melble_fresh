@@ -15,89 +15,211 @@ interface InfosProps {
 export function Infos({ isOpen, close, settingsData }: InfosProps) {
   return (
     <Panel title="How to play" isOpen={isOpen} close={close}>
-      <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
-        <div>
-          A mystery Melbourne suburb has just landed on the café counter. Read
-          its outline and name it before your six guesses run out.
-        </div>
-        <div>
-          Start typing a suburb and choose one from the list. MelBurb accepts
-          Greater Melbourne suburbs included in the game, rather than smaller
-          localities.
-        </div>
-        <div>
-          Every guess comes back with three clues: how far away it is, which
-          direction to travel, and a proximity percentage. Follow the trail
-          until you reach the mystery <MelBurb />.
-        </div>
-        <div>
-          Name it exactly to collect 100 points. If the answer escapes you, your
-          nearest guess still earns 75 points at 1 km or closer, 50 at 3 km or
-          closer, or 25 at 5 km or closer. Anything farther earns no points, and
-          each Barista clue deducts 10 points.
-        </div>
-        <div>
-          Visit Daily for the shared puzzle of the day, open Practice for
-          unlimited extra rounds, or pass a completed puzzle to a friend as a
-          challenge.
-        </div>
-      </div>
-      <div className="space-y-3 text-justify border-b-2 border-gray-200 pb-3 mb-3">
-        <div className="font-bold">Examples</div>
-        <div>
-          <Guesses
-            rowCount={1}
-            guesses={[
-              {
-                name: "St Kilda",
-                direction: "N",
-                distance: 7_000,
-              },
-            ]}
-            settingsData={settingsData}
-          />
-          <div className="my-2">
-            You order <span className="uppercase font-bold">St Kilda</span>, but
-            the mystery suburb is {formatDistance(7_000)} to the north. The
-            arrow gives you a direction for your next move.
+      <div className="space-y-6">
+        <section>
+          <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+            <Twemoji text="🎯" options={{ className: "inline-block" }} />
+            The Goal
+          </h3>
+          <p className="text-stone-300">
+            A mystery Melbourne suburb is waiting. You have{" "}
+            <strong>6 guesses</strong> to name it based on distance clues.
+          </p>
+        </section>
+
+        <section>
+          <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+            <Twemoji text="⌨️" options={{ className: "inline-block" }} />
+            How to Guess
+          </h3>
+          <ul className="text-stone-300 space-y-1 list-none">
+            <li>• Start typing a suburb name and select from the list</li>
+            <li>
+              • Only <strong>Greater Melbourne suburbs</strong> are valid
+              guesses
+            </li>
+            <li>
+              • Each guess reveals <strong>3 clues</strong> to help you
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+            <Twemoji text="📍" options={{ className: "inline-block" }} />
+            The Clues
+          </h3>
+          <div className="bg-stone-900 rounded-lg p-3 mb-3">
+            <div className="grid grid-cols-3 gap-2 text-center text-xs mb-2">
+              <div className="bg-stone-800 p-2 rounded">
+                <div className="text-amber-400 font-bold">📏 Distance</div>
+                <div className="text-stone-400">How far away (in km)</div>
+              </div>
+              <div className="bg-stone-800 p-2 rounded">
+                <div className="text-amber-400 font-bold">🧭 Direction</div>
+                <div className="text-stone-400">Where to go next</div>
+              </div>
+              <div className="bg-stone-800 p-2 rounded">
+                <div className="text-amber-400 font-bold">📊 Proximity</div>
+                <div className="text-stone-400">Match percentage</div>
+              </div>
+            </div>
+            <p className="text-stone-400 text-xs text-center">
+              Use these clues to narrow down the mystery suburb!
+            </p>
           </div>
-        </div>
-        <div>
-          <Guesses
-            rowCount={1}
-            guesses={[
-              {
-                name: "Richmond",
-                direction: "NW",
-                distance: 3_000,
-              },
-            ]}
-            settingsData={settingsData}
-          />
-          <div className="my-2">
-            Next comes <span className="uppercase font-bold">Richmond</span>. At{" "}
-            {formatDistance(3_000)} away, you are getting warmer; head
-            north-west to close the gap.
+        </section>
+
+        <section>
+          <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+            <Twemoji text="🧭" options={{ className: "inline-block" }} />
+            Direction Guide
+          </h3>
+          <div className="flex flex-wrap gap-2 justify-center bg-stone-900 rounded-lg p-3">
+            {["N", "NE", "E", "SE", "S", "SW", "W", "NW"].map((dir) => (
+              <span
+                key={dir}
+                className="bg-stone-800 px-2 py-1 rounded text-sm font-mono"
+              >
+                {dir}
+              </span>
+            ))}
+            <span className="text-stone-500 text-xs self-center ml-2">
+              = North, South, East, West + combinations
+            </span>
           </div>
-        </div>
-        <div>
-          <Guesses
-            rowCount={1}
-            guesses={[
-              {
-                name: "Fitzroy",
-                direction: "N",
-                distance: 0,
-              },
-            ]}
-            settingsData={settingsData}
-          />
-          <div className="my-2">
-            <span className="uppercase font-bold">Fitzroy</span> is the perfect
-            pour: the distance reaches zero and the suburb is solved!{" "}
-            <Twemoji text="🎉" options={{ className: "inline-block" }} />
+        </section>
+
+        <section>
+          <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+            <Twemoji text="🏆" options={{ className: "inline-block" }} />
+            Scoring
+          </h3>
+          <div className="bg-stone-900 rounded-lg p-3">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Twemoji text="🎯" options={{ className: "inline-block" }} />
+                  Exact match
+                </span>
+                <span className="bg-amber-700 px-3 py-1 rounded font-bold">
+                  100 pts
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Twemoji text="📍" options={{ className: "inline-block" }} />
+                  Within 1 km
+                </span>
+                <span className="bg-stone-700 px-3 py-1 rounded font-bold">
+                  75 pts
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Twemoji text="📍" options={{ className: "inline-block" }} />
+                  Within 3 km
+                </span>
+                <span className="bg-stone-700 px-3 py-1 rounded font-bold">
+                  50 pts
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Twemoji text="📍" options={{ className: "inline-block" }} />
+                  Within 5 km
+                </span>
+                <span className="bg-stone-700 px-3 py-1 rounded font-bold">
+                  25 pts
+                </span>
+              </div>
+              <hr className="border-stone-700" />
+              <div className="flex items-center justify-between text-stone-400">
+                <span>Barista clue (each)</span>
+                <span className="text-red-400">-10 pts</span>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <section>
+          <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
+            <Twemoji text="💡" options={{ className: "inline-block" }} />
+            Example Game
+          </h3>
+
+          <div className="space-y-4">
+            <div className="bg-stone-900 rounded-lg p-3">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-amber-600 text-xs px-2 py-1 rounded-full font-bold">
+                  1
+                </span>
+                <span className="text-stone-300">First guess - far away</span>
+              </div>
+              <Guesses
+                rowCount={1}
+                guesses={[
+                  {
+                    name: "St Kilda",
+                    direction: "N",
+                    distance: 7_000,
+                  },
+                ]}
+                settingsData={settingsData}
+              />
+              <p className="text-stone-400 text-sm mt-2">
+                📏 <strong>7 km north</strong> — head that way!
+              </p>
+            </div>
+
+            <div className="bg-stone-900 rounded-lg p-3">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-amber-600 text-xs px-2 py-1 rounded-full font-bold">
+                  2
+                </span>
+                <span className="text-stone-300">Getting warmer!</span>
+              </div>
+              <Guesses
+                rowCount={1}
+                guesses={[
+                  {
+                    name: "Richmond",
+                    direction: "NW",
+                    distance: 3_000,
+                  },
+                ]}
+                settingsData={settingsData}
+              />
+              <p className="text-stone-400 text-sm mt-2">
+                📏 <strong>3 km north-west</strong> — you&apos;re getting
+                closer!
+              </p>
+            </div>
+
+            <div className="bg-stone-900 rounded-lg p-3 border-2 border-green-600">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="bg-green-600 text-xs px-2 py-1 rounded-full font-bold">
+                  3
+                </span>
+                <span className="text-green-400 font-bold">Solved! 🎉</span>
+              </div>
+              <Guesses
+                rowCount={1}
+                guesses={[
+                  {
+                    name: "Fitzroy",
+                    direction: "N",
+                    distance: 0,
+                  },
+                ]}
+                settingsData={settingsData}
+              />
+              <p className="text-green-400 text-sm mt-2">
+                🎯 <strong>Distance: 0 km</strong> — Perfect pour! 100 points!
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
     </Panel>
   );

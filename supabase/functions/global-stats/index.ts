@@ -61,6 +61,32 @@ serve(async (req) => {
     const dailyWinRate =
       dailyGames && dailyGames > 0 ? dailySolved / dailyGames : 0;
 
+    // Get guess distribution for solved games
+    const { data: solvedGames, error: solvedGamesError } = await supabaseAdmin
+      .from("game_results")
+      .select("guesses_count")
+      .eq("solved", true)
+      .gte("guesses_count", 1)
+      .lte("guesses_count", 6);
+
+    if (solvedGamesError) throw solvedGamesError;
+
+    // Calculate guess distribution
+    const guessDistribution: Record<number, number> = {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+    };
+
+    for (const game of solvedGames || []) {
+      if (game.guesses_count >= 1 && game.guesses_count <= 6) {
+        guessDistribution[game.guesses_count]++;
+      }
+    }
+
     return new Response(
       JSON.stringify({
         totalUsers: totalUsers ?? 0,
@@ -70,6 +96,7 @@ serve(async (req) => {
         dailyGames: dailyGames ?? 0,
         dailySolved: dailySolved ?? 0,
         dailyWinRate,
+        guessDistribution,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
