@@ -422,31 +422,15 @@ export function Game({
                     </small>
                   )}
                 </div>
-                <Share
-                  guesses={guesses}
-                  dayString={dayString}
-                  settingsData={settingsData}
-                  hideImageMode={hideImageMode}
-                  rotationMode={rotationMode}
-                />
-                <div className="flex gap-2 mt-3">
+                {gameMode === "practice" && (
                   <button
                     type="button"
-                    className="cafe-button flex-1"
-                    onClick={copyChallenge}
+                    className="cafe-button w-full mt-3"
+                    onClick={onNextPractice}
                   >
-                    Challenge a friend
+                    Next practice
                   </button>
-                  {gameMode === "practice" && (
-                    <button
-                      type="button"
-                      className="cafe-button flex-1"
-                      onClick={onNextPractice}
-                    >
-                      Next practice
-                    </button>
-                  )}
-                </div>
+                )}
               </>
             )}
           </>

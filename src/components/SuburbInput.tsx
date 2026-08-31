@@ -23,7 +23,7 @@ export function SuburbInput({
 
   return (
     <Autosuggest
-      theme={{ suggestionHighlighted: "font-bold" }}
+      theme={{ suggestionHighlighted: "suggestion-highlighted" }}
       shouldRenderSuggestions={() => true}
       highlightFirstSuggestion
       suggestions={suggestions}
@@ -40,9 +40,7 @@ export function SuburbInput({
       onSuggestionsClearRequested={() => setSuggestions([])}
       getSuggestionValue={(suggestion) => suggestion}
       renderSuggestion={(suggestion) => (
-        <div className="m-0.5 bg-black text-white p-1 cursor-pointer">
-          {suggestion}
-        </div>
+        <div className="suburb-suggestion">{suggestion}</div>
       )}
       containerProps={{
         className: "guess-entry-field rounded flex-auto relative",
@@ -59,7 +57,7 @@ export function SuburbInput({
       renderSuggestionsContainer={({ containerProps, children }) => (
         <div
           {...containerProps}
-          className={`${containerProps.className} rounded absolute bottom-full w-full bg-black text-white mb-1 max-h-52 overflow-auto`}
+          className={`${containerProps.className} rounded absolute bottom-full w-full bg-stone-950 text-stone-100 mb-1 max-h-52 overflow-auto border-2 border-amber-900`}
         >
           {children}
         </div>
