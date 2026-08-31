@@ -251,6 +251,21 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
               />
+              {authMode === "signup" && !progress.displayName && (
+                <>
+                  <label htmlFor="display-name">Display name</label>
+                  <input
+                    id="display-name"
+                    type="text"
+                    autoComplete="nickname"
+                    maxLength={24}
+                    required
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Your visible player name"
+                  />
+                </>
+              )}
               <button
                 className="cafe-button w-full"
                 type="submit"
@@ -267,7 +282,7 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
         </>
       )}
       {message && <p className="account-message mb-4">{message}</p>}
-      {progress.displayName ? (
+      {progress.displayName && session?.user && (
         <div className="mb-4">
           <label className="block font-bold mb-1">Display name</label>
           <div className="flex items-center gap-2 rounded border-2 border-stone-500 bg-stone-800 p-2">
@@ -278,25 +293,7 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
             Display name is locked to your account.
           </p>
         </div>
-      ) : authMode === "signup" ? (
-        <>
-          <label className="block font-bold mb-1" htmlFor="display-name">
-            Display name
-          </label>
-          <div className="flex gap-2">
-            <input
-              id="display-name"
-              className="flex-1 rounded border-2 border-stone-500 bg-transparent p-2"
-              maxLength={24}
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-            <button className="cafe-button" onClick={saveName} type="button">
-              Save
-            </button>
-          </div>
-        </>
-      ) : null}
+      )}
       <div className="grid grid-cols-3 gap-2 my-6 text-center">
         <ProfileStat value={progress.totalPoints} label="Points" />
         <ProfileStat value={progress.completedGames} label="Games" />
