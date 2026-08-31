@@ -18,7 +18,6 @@ import { getGameScore } from "../domain/guess";
 import { PlayerProgress, recordCompletedGame } from "../domain/progress";
 import { synchronizeCompletedGame } from "../domain/cloudProgress";
 
-const ENABLE_TWITCH_LINK = false;
 const MAX_TRY_COUNT = 6;
 const RETRY_PROMPTS = [
   "Coffee down. Where next?",
