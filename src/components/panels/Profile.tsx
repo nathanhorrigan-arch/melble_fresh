@@ -183,30 +183,6 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
     }
   }
 
-  async function saveName() {
-    const trimmedName = name.trim();
-    if (!trimmedName) {
-      setMessage("Display name cannot be empty.");
-      return;
-    }
-    if (containsProfanity(trimmedName)) {
-      setMessage("Display name contains inappropriate content.");
-      setName("");
-      return;
-    }
-
-    const next = saveDisplayName(trimmedName);
-    onChange(next);
-
-    if (session?.user) {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ display_name: next.displayName })
-        .eq("id", session.user.id);
-      setMessage(error ? error.message : "Display name saved to your account.");
-    }
-  }
-
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     setMessage(error ? error.message : "You are signed out.");
