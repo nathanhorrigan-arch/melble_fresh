@@ -87,6 +87,7 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const { session, isLoading } = useAuth();
@@ -161,6 +162,25 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
         ? "Check your email to confirm your new MelBurb account."
         : "You are signed in. Your player card is now connected."
     );
+  }
+
+  async function handleForgotPassword(event: FormEvent) {
+    event.preventDefault();
+    if (!email) {
+      setMessage("Please enter your email address.");
+      return;
+    }
+    setSubmitting(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://www.melburb.com/",
+    });
+    setSubmitting(false);
+    if (error) {
+      setMessage(error.message);
+    } else {
+      setMessage("Check your email for a password reset link.");
+      setForgotPasswordMode(false);
+    }
   }
 
   async function saveName() {
@@ -251,23 +271,27 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
               />
-              {authMode === "signup" && !progress.displayName && (
-                <>
-                  <label htmlFor="display-name">Display name</label>
-                  <input
-                    id="display-name"
-                    type="text"
-                    autoComplete="nickname"
-                    maxLength={24}
-                    required
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    placeholder="Your visible player name"
-                  />
-                </>
-              )}
+              {authMode === "signup" &&
+                (progress.displayName === "Café Guest" ||
+                  !progress.displayName) && (
+                  <>
+                    <label htmlFor="display-name">
+                      Please create a display name
+                    </label>
+                    <input
+                      id="display-name"
+                      type="text"
+                      autoComplete="nickname"
+                      maxLength={24}
+                      required
+                      value={name}
+                      onChange={(event) => setName(event.target.value)}
+                      placeholder="Your visible player name"
+                    />
+                  </>
+                )}
               <button
-                className="cafe-button w-full"
+                className="cafe-button w-full mt-4"
                 type="submit"
                 disabled={submitting}
               >
@@ -278,6 +302,50 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
                   : "Sign in"}
               </button>
             </form>
+            {authMode === "signin" && !forgotPasswordMode && (
+              <button
+                type="button"
+                className="text-sm text-amber-400 hover:text-amber-300 mt-3 underline"
+                onClick={() => setForgotPasswordMode(true)}
+              >
+                Forgot password?
+              </button>
+            )}
+            {forgotPasswordMode && (
+              <form onSubmit={handleForgotPassword} className="mt-4">
+                <p className="text-sm text-stone-300 mb-3">
+                  Enter your email and we&apos;ll send you a link to reset your
+                  password.
+                </p>
+                <label htmlFor="reset-email">Email</label>
+                <input
+                  id="reset-email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="mb-3"
+                />
+                <button
+                  className="cafe-button w-full"
+                  type="submit"
+                  disabled={submitting}
+                >
+                  {submitting ? "Please wait…" : "Send reset link"}
+                </button>
+                <button
+                  type="button"
+                  className="text-sm text-stone-400 hover:text-stone-300 mt-2"
+                  onClick={() => {
+                    setForgotPasswordMode(false);
+                    setMessage("");
+                  }}
+                >
+                  Back to sign in
+                </button>
+              </form>
+            )}
           </div>
         </>
       )}
@@ -294,34 +362,6 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
           </p>
         </div>
       )}
-      <div className="grid grid-cols-3 gap-2 my-6 text-center">
-        <ProfileStat value={progress.totalPoints} label="Points" />
-        <ProfileStat value={progress.completedGames} label="Games" />
-        <ProfileStat value={progress.closeCalls} label="Close calls" />
-      </div>
-      <h3 className="font-bold uppercase tracking-wider mb-2">Achievements</h3>
-      {progress.achievements.length ? (
-        <div className="flex flex-wrap gap-2">
-          {progress.achievements.map((achievement) => (
-            <span className="achievement-chip" key={achievement}>
-              ☕ {achievement}
-            </span>
-          ))}
-        </div>
-      ) : (
-        <p className="text-sm opacity-70">
-          Finish a game to earn your first badge.
-        </p>
-      )}
     </Panel>
-  );
-}
-
-function ProfileStat({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="rounded border-2 border-stone-500 p-3">
-      <div className="text-2xl font-black text-amber-400">{value}</div>
-      <div className="text-xs uppercase tracking-wider">{label}</div>
-    </div>
   );
 }
