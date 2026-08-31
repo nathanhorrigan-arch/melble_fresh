@@ -64,6 +64,10 @@ const BLOCKED_TERMS = [
   "f_u_c_k",
   "c_u_n_t",
   "s_h_i_t",
+  "tits",
+  "breasts",
+  "jugs",
+  "knockers",
 ];
 
 function containsProfanity(text: string): boolean {
