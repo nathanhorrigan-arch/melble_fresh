@@ -278,7 +278,7 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
             Display name is locked to your account.
           </p>
         </div>
-      ) : (
+      ) : authMode === "signup" ? (
         <>
           <label className="block font-bold mb-1" htmlFor="display-name">
             Display name
@@ -296,7 +296,7 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
             </button>
           </div>
         </>
-      )}
+      ) : null}
       <div className="grid grid-cols-3 gap-2 my-6 text-center">
         <ProfileStat value={progress.totalPoints} label="Points" />
         <ProfileStat value={progress.completedGames} label="Games" />
