@@ -153,13 +153,31 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
     setPassword("");
 
     if (result.error) {
-      setMessage(result.error.message);
+      if (
+        authMode === "signup" &&
+        result.error.message.includes("already been registered")
+      ) {
+        setMessage(
+          "An account with this email already exists. Please sign in instead."
+        );
+        setAuthMode("signin");
+      } else if (
+        authMode === "signup" &&
+        result.error.message.includes("User already registered")
+      ) {
+        setMessage(
+          "An account with this email already exists. Please sign in instead."
+        );
+        setAuthMode("signin");
+      } else {
+        setMessage(result.error.message);
+      }
       return;
     }
 
     setMessage(
       authMode === "signup" && !result.data.session
-        ? "Check your email to confirm your new MelBurb account."
+        ? "Check your email to confirm. If you already have an account, click Sign in instead."
         : "You are signed in. Your player card is now connected."
     );
   }
@@ -277,6 +295,19 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
                   ? "Create account"
                   : "Sign in"}
               </button>
+              {authMode === "signup" && (
+                <p className="text-xs text-stone-400 mt-2 text-center">
+                  Already have an account?{" "}
+                  <button
+                    type="button"
+                    className="text-amber-400 hover:text-amber-300 underline"
+                    onClick={() => setAuthMode("signin")}
+                  >
+                    Sign in
+                  </button>{" "}
+                  instead.
+                </p>
+              )}
             </form>
             {authMode === "signin" && !forgotPasswordMode && (
               <button
