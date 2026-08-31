@@ -5,6 +5,72 @@ import { supabase } from "../../lib/supabase";
 import { synchronizeLocalHistory } from "../../domain/cloudProgress";
 import { Panel } from "./Panel";
 
+// Profanity filter - matches database migration
+const BLOCKED_TERMS = [
+  "fuck",
+  "shit",
+  "bitch",
+  "cunt",
+  "nigger",
+  "faggot",
+  "retard",
+  "whore",
+  "slut",
+  "pussy",
+  "dick",
+  "cock",
+  "asshole",
+  "bastard",
+  "damn",
+  "hell",
+  "piss",
+  "cum",
+  "jizz",
+  "twat",
+  "crap",
+  "wank",
+  "fag",
+  "dyke",
+  "tranny",
+  "shemale",
+  "kike",
+  "spic",
+  "chink",
+  "gook",
+  "wetback",
+  "raghead",
+  "sandnigger",
+  "porchmonkey",
+  "coon",
+  "nigga",
+  "niggah",
+  "nigguh",
+  "niglet",
+  "coonass",
+  "honky",
+  "cracker",
+  "whitey",
+  "redneck",
+  "hillbilly",
+  "trailertrash",
+  "nazi",
+  "jew",
+  "motherfucker",
+  "fucker",
+  "fucked",
+  "fuck_me",
+  "fuck me",
+  "fuck it",
+  "f_u_c_k",
+  "c_u_n_t",
+  "s_h_i_t",
+];
+
+function containsProfanity(text: string): boolean {
+  const lower = text.toLowerCase();
+  return BLOCKED_TERMS.some((term) => lower.includes(term));
+}
+
 interface ProfileProps {
   isOpen: boolean;
   close: () => void;
@@ -54,13 +120,25 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
     setSubmitting(true);
     setMessage("");
 
+    const trimmedName = name.trim();
+    if (
+      authMode === "signup" &&
+      trimmedName &&
+      containsProfanity(trimmedName)
+    ) {
+      setSubmitting(false);
+      setMessage("Display name contains inappropriate content.");
+      setName("");
+      return;
+    }
+
     const result =
       authMode === "signup"
         ? await supabase.auth.signUp({
             email,
             password,
             options: {
-              data: { display_name: name.trim() || "MelBurb Player" },
+              data: { display_name: trimmedName || "MelBurb Player" },
               emailRedirectTo: "https://www.melburb.com/",
             },
           })
@@ -82,7 +160,18 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
   }
 
   async function saveName() {
-    const next = saveDisplayName(name);
+    const trimmedName = name.trim();
+    if (!trimmedName) {
+      setMessage("Display name cannot be empty.");
+      return;
+    }
+    if (containsProfanity(trimmedName)) {
+      setMessage("Display name contains inappropriate content.");
+      setName("");
+      return;
+    }
+
+    const next = saveDisplayName(trimmedName);
     onChange(next);
 
     if (session?.user) {

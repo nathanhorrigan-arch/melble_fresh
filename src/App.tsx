@@ -8,6 +8,7 @@ import { useSettings } from "./hooks/useSettings";
 import { Profile } from "./components/panels/Profile";
 import { loadProgress, PlayerProgress } from "./domain/progress";
 import { History } from "./components/panels/History";
+import { Statistics } from "./components/panels/Statistics";
 import Twemoji from "./components/Twemoji";
 
 export type GameMode = "daily" | "practice" | "challenge";
@@ -19,6 +20,7 @@ export default function App() {
   const [historyOpen, setHistoryOpen] = useState(
     () => window.location.hash === "#history"
   );
+  const [statsOpen, setStatsOpen] = useState(false);
   const [progress, setProgress] = useState<PlayerProgress>(() =>
     loadProgress()
   );
@@ -54,6 +56,10 @@ export default function App() {
     }
   };
 
+  const closeStats = () => {
+    setStatsOpen(false);
+  };
+
   return (
     <>
       <ToastContainer
@@ -83,7 +89,12 @@ export default function App() {
         progress={progress}
         onChange={setProgress}
       />
-      <History isOpen={historyOpen} close={closeHistory} />
+      <History
+        isOpen={historyOpen}
+        close={closeHistory}
+        onViewStats={() => setStatsOpen(true)}
+      />
+      <Statistics isOpen={statsOpen} close={closeStats} />
       <div className="cafe-world flex justify-center flex-auto text-stone-100">
         <div className="w-full flex flex-col cafe-game-shell">
           <div className="cafe-game-content">
@@ -110,8 +121,8 @@ export default function App() {
                 <button type="button" onClick={() => setProfileOpen(true)}>
                   Login / Register
                 </button>
-                <button type="button" onClick={() => setHistoryOpen(true)}>
-                  Game History
+                <button type="button" onClick={() => setStatsOpen(true)}>
+                  Statistics
                 </button>
                 <button type="button" onClick={() => setSettingsOpen(true)}>
                   Settings

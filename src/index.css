@@ -195,6 +195,248 @@ a:focus-visible {
   white-space: nowrap;
 }
 
+.view-stats-button {
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--amber);
+  background: #1c1511;
+  color: var(--crema);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.view-stats-button:hover {
+  background: var(--amber);
+  color: #111;
+}
+
+.statistics-content {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.stat-card {
+  border: 2px solid #594039;
+  background: #100d0c;
+  padding: 1rem;
+  text-align: center;
+}
+
+.stat-value {
+  color: var(--amber);
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.stat-label {
+  color: var(--gumleaf);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.statistics-section {
+  border: 2px solid #594039;
+  background: #100d0c;
+  padding: 1rem;
+}
+
+.statistics-section-title {
+  margin-bottom: 0.75rem;
+  color: var(--crema);
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.statistics-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.mode-stat {
+  border: 2px solid #594039;
+  background: #0a0807;
+  padding: 0.75rem;
+}
+
+.mode-name {
+  color: var(--crema);
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+.mode-details {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #c9bcae;
+}
+
+.mode-details span::before {
+  content: "\2022 ";
+  color: var(--gumleaf);
+}
+
+.guess-distribution {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.guess-distribution-row {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.guess-number {
+  color: var(--crema);
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+.guess-bar-container {
+  height: 1.25rem;
+  background: #3e281f;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.guess-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amber), var(--gumleaf));
+  transition: width 0.3s ease;
+}
+
+.guess-count {
+  color: var(--gumleaf);
+  font-weight: 900;
+  font-size: 0.875rem;
+  min-width: 2rem;
+  text-align: right;
+}
+
+.statistics-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-bottom: 1rem;
+  border: 2px solid #594039;
+  background: #0a0807;
+}
+
+.statistics-tabs button {
+  padding: 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--gumleaf);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.statistics-tabs button:hover {
+  background: #1c1511;
+  color: var(--crema);
+}
+
+.statistics-tabs button.active {
+  background: var(--amber);
+  color: #111;
+}
+
+.leaderboard-sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 2px solid #594039;
+  background: #100d0c;
+}
+
+.leaderboard-sort label {
+  color: var(--gumleaf);
+  font-weight: 900;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.leaderboard-sort select {
+  flex: 1;
+  max-width: 200px;
+  padding: 0.5rem;
+  border: 2px solid #75605a;
+  background: #070606;
+  color: #f8e2b8;
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+.leaderboard-table {
+  overflow-x: auto;
+}
+
+.leaderboard-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #3e281f;
+}
+
+.leaderboard-table th {
+  color: var(--gumleaf);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.65rem;
+  background: #0a0807;
+}
+
+.leaderboard-table td {
+  color: #c9bcae;
+}
+
+.leaderboard-table tr:hover td {
+  background: #15100e;
+}
+
+.leaderboard-table .rank {
+  color: var(--amber);
+  font-weight: 900;
+  text-align: center;
+}
+
+.leaderboard-table .player-name {
+  color: var(--crema);
+  font-weight: 900;
+}
+
 .history-empty {
   border: 2px dashed #594039;
   padding: 1.25rem;

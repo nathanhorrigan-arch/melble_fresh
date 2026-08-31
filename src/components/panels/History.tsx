@@ -7,6 +7,7 @@ import { StatsContent } from "./Stats";
 interface HistoryProps {
   isOpen: boolean;
   close: () => void;
+  onViewStats?: () => void;
 }
 
 interface HistoryResult {
@@ -20,7 +21,7 @@ interface HistoryResult {
   played_at: string;
 }
 
-export function History({ isOpen, close }: HistoryProps) {
+export function History({ isOpen, close, onViewStats }: HistoryProps) {
   const { session, isLoading: authLoading } = useAuth();
   const [results, setResults] = useState<HistoryResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -80,6 +81,15 @@ export function History({ isOpen, close }: HistoryProps) {
             <HistoryStat label="Games" value={results.length} />
             <HistoryStat label="Solved" value={solvedGames} />
             <HistoryStat label="Points" value={totalPoints} />
+            {onViewStats && (
+              <button
+                className="view-stats-button"
+                type="button"
+                onClick={onViewStats}
+              >
+                View Statistics \u2192
+              </button>
+            )}
           </div>
           <StatsContent />
           <h3 className="history-results-title">Completed games</h3>
