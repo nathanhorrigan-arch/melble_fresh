@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { getSuburbName, sanitizeSuburbName } from "../domain/suburbs";
 import { SuburbInput } from "./SuburbInput";
 import * as geolib from "geolib";
-import { Share } from "./Share";
 import { Guesses } from "./Guesses";
 import { useTranslation } from "react-i18next";
 import { SettingsData } from "../hooks/useSettings";
@@ -171,16 +170,6 @@ export function Game({
       `About ${cbdDistance} km from the CBD`,
     ];
   }, [suburb, suburbName]);
-
-  const copyChallenge = async () => {
-    const seed =
-      gameMode === "challenge" ? challengeSeed || dailyKey : dayString;
-    const url = `${window.location.origin}${
-      window.location.pathname
-    }?challenge=${encodeURIComponent(seed)}`;
-    await navigator.clipboard.writeText(url);
-    toast.success("Challenge link copied!");
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (suburb == null) {
