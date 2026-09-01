@@ -1,6 +1,4 @@
-Contact: https://www.melburb.com/contact
+Contact: https://github.com/nathanhorrigan-arch/melble_fresh/issues
 Expires: 2027-12-31T23:59:59.000Z
-Encryption: https://www.melburb.com/.well-known/pgp-key.txt
 Preferred-Languages: en
 Canonical: https://www.melburb.com/security.txt
-Policy: https://www.melburb.com/.well-known/security-policy.txt
