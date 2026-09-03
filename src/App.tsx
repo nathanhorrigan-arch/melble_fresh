@@ -17,6 +17,9 @@ export default function App() {
   const [infoOpen, setInfoOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [profileAuthMode, setProfileAuthMode] = useState<"signin" | "signup">(
+    "signin"
+  );
   const [historyOpen, setHistoryOpen] = useState(
     () => window.location.hash === "#history"
   );
@@ -88,6 +91,7 @@ export default function App() {
         close={() => setProfileOpen(false)}
         progress={progress}
         onChange={setProgress}
+        initialAuthMode={profileAuthMode}
       />
       <History
         isOpen={historyOpen}
@@ -118,7 +122,13 @@ export default function App() {
                 <button type="button" onClick={() => setInfoOpen(true)}>
                   How to Play
                 </button>
-                <button type="button" onClick={() => setProfileOpen(true)}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProfileAuthMode("signin");
+                    setProfileOpen(true);
+                  }}
+                >
                   Login / Register
                 </button>
                 <button type="button" onClick={() => setStatsOpen(true)}>
@@ -136,6 +146,14 @@ export default function App() {
               practiceRound={practiceRound}
               challengeSeed={challengeSeed || undefined}
               onProgress={setProgress}
+              onSignIn={() => {
+                setProfileAuthMode("signin");
+                setProfileOpen(true);
+              }}
+              onCreateAccount={() => {
+                setProfileAuthMode("signup");
+                setProfileOpen(true);
+              }}
               onNextPractice={() => {
                 const next = practiceRound + 1;
                 localStorage.setItem("melble-practice-round", String(next));

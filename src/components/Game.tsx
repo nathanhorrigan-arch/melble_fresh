@@ -15,7 +15,12 @@ import { bestGuessPercent, dayCount } from "../domain/guessStats";
 import type { GameMode } from "../App";
 import { getGameScore } from "../domain/guess";
 import { PlayerProgress, recordCompletedGame } from "../domain/progress";
-import { synchronizeCompletedGame } from "../domain/cloudProgress";
+import {
+  GameResult,
+  loadCompletedGame,
+  synchronizeCompletedGame,
+} from "../domain/cloudProgress";
+import { useAuth } from "../hooks/useAuth";
 
 const MAX_TRY_COUNT = 6;
 const RETRY_PROMPTS = [
@@ -44,6 +49,8 @@ interface GameProps {
   challengeSeed?: string;
   onNextPractice: () => void;
   onProgress: (progress: PlayerProgress) => void;
+  onSignIn: () => void;
+  onCreateAccount: () => void;
 }
 
 export function Game({
@@ -54,8 +61,11 @@ export function Game({
   challengeSeed,
   onNextPractice,
   onProgress,
+  onSignIn,
+  onCreateAccount,
 }: GameProps) {
   const { t, i18n } = useTranslation();
+  const { session, isLoading: authLoading } = useAuth();
   const dailyKey = useMemo(
     () => getDayString(settingsData.shiftDayCount),
     [settingsData.shiftDayCount]
@@ -71,10 +81,16 @@ export function Game({
       : gameMode === "challenge"
       ? `challenge-${challengeSeed}`
       : dailyKey;
+  const storageKey = session?.user
+    ? `${session.user.id}:${dayString}`
+    : `guest:${dayString}`;
 
   const suburbInputRef = useRef<HTMLInputElement>(null);
 
-  const [todays, addGuess, randomAngle, imageScale] = useTodays(dayString);
+  const [todays, addGuess, randomAngle, imageScale] = useTodays(
+    dayString,
+    storageKey
+  );
   const { suburb, guesses } = todays;
   const suburbName = useMemo(
     () => (suburb ? getSuburbName(i18n.resolvedLanguage, suburb) : ""),
@@ -83,33 +99,71 @@ export function Game({
 
   const [currentGuess, setCurrentGuess] = useState("");
   const [showWinCelebration, setShowWinCelebration] = useState(false);
+  const [cloudResult, setCloudResult] = useState<GameResult | null>(null);
+  const [cloudResultLoading, setCloudResultLoading] = useState(true);
+  const [cloudResultError, setCloudResultError] = useState(false);
   const [revealedClues, setRevealedClues] = useState<number[]>(() => {
-    const stored = localStorage.getItem(`clues-${dayString}`);
+    const stored = localStorage.getItem(`clues-${storageKey}`);
     return stored ? JSON.parse(stored) : [];
   });
   const [hideImageMode, setHideImageMode] = useMode(
     "hideImageMode",
-    dayString,
+    storageKey,
     settingsData.noImageMode
   );
   const [rotationMode, setRotationMode] = useMode(
     "rotationMode",
-    dayString,
+    storageKey,
     settingsData.rotationMode
   );
 
-  const gameEnded =
+  const localGameEnded =
     guesses.length === MAX_TRY_COUNT ||
     guesses[guesses.length - 1]?.distance === 0;
   const awardsPoints = gameMode === "daily";
-  const gameScore = awardsPoints
-    ? getGameScore(guesses, revealedClues.length)
-    : 0;
+  const gameEnded = localGameEnded || (awardsPoints && cloudResult != null);
+  const gameWasSolved =
+    cloudResult?.solved ?? guesses.some((guess) => guess.distance === 0);
+  const gameScore =
+    cloudResult?.score ??
+    (awardsPoints ? getGameScore(guesses, revealedClues.length) : 0);
+  const checkingDailyStatus =
+    authLoading || (Boolean(session?.user) && cloudResultLoading);
 
   useEffect(() => {
-    const stored = localStorage.getItem(`clues-${dayString}`);
+    const stored = localStorage.getItem(`clues-${storageKey}`);
     setRevealedClues(stored ? JSON.parse(stored) : []);
-  }, [dayString]);
+  }, [storageKey]);
+
+  useEffect(() => {
+    let active = true;
+
+    if (authLoading) return () => undefined;
+    if (!session?.user || !awardsPoints) {
+      setCloudResult(null);
+      setCloudResultLoading(false);
+      setCloudResultError(false);
+      return () => undefined;
+    }
+
+    setCloudResult(null);
+    setCloudResultLoading(true);
+    setCloudResultError(false);
+    loadCompletedGame(session.user.id, dayString)
+      .then((result) => {
+        if (active) setCloudResult(result);
+      })
+      .catch(() => {
+        if (active) setCloudResultError(true);
+      })
+      .finally(() => {
+        if (active) setCloudResultLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [authLoading, awardsPoints, dayString, session?.user]);
 
   useEffect(() => {
     if (!showWinCelebration) return;
@@ -118,7 +172,7 @@ export function Game({
   }, [showWinCelebration]);
 
   useEffect(() => {
-    if (gameEnded && guesses.length > 0) {
+    if (localGameEnded && guesses.length > 0) {
       const localProgress = recordCompletedGame(
         dayString,
         guesses,
@@ -143,7 +197,7 @@ export function Game({
     }
   }, [
     dayString,
-    gameEnded,
+    localGameEnded,
     gameMode,
     guesses,
     onProgress,
@@ -154,7 +208,7 @@ export function Game({
   const revealClue = (index: number) => {
     if (revealedClues.includes(index)) return;
     const next = [...revealedClues, index];
-    localStorage.setItem(`clues-${dayString}`, JSON.stringify(next));
+    localStorage.setItem(`clues-${storageKey}`, JSON.stringify(next));
     setRevealedClues(next);
   };
 
@@ -172,10 +226,11 @@ export function Game({
   }, [suburb, suburbName]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!session?.user || checkingDailyStatus || cloudResultError) return;
     if (suburb == null) {
       return;
     }
-    e.preventDefault();
     const guessedSuburb = suburbs.find(
       (suburb) =>
         sanitizeSuburbName(getSuburbName(i18n.resolvedLanguage, suburb)) ===
@@ -350,12 +405,14 @@ export function Game({
       <div className="my-2">
         {gameEnded && suburb ? (
           <>
-            {guesses.some((guess) => guess.distance === 0) ? (
+            {gameWasSolved ? (
               <div className="suburb-revealed-card">
                 <div className="suburb-revealed-header">
                   <span className="suburb-revealed-emoji">🎉</span>
                   <span className="suburb-revealed-title">
-                    You got it, you found
+                    {cloudResult && !localGameEnded
+                      ? "Today's brew is already complete"
+                      : "You got it, you found"}
                   </span>
                   <strong className="suburb-revealed-name">
                     {suburbName}!
@@ -409,6 +466,9 @@ export function Game({
                       Distance points awarded because the suburb was not guessed
                       exactly.
                     </small>
+                  )}
+                  {cloudResult && !localGameEnded && (
+                    <small>Completed earlier on your player card.</small>
                   )}
                 </div>
                 <div className="suburb-revealed-card mt-3">
@@ -468,6 +528,48 @@ export function Game({
               </>
             )}
           </>
+        ) : checkingDailyStatus ? (
+          <section className="daily-access-card" aria-live="polite">
+            <Twemoji text="☕" className="daily-access-icon" />
+            <h2>CHECKING TODAY&apos;S BREW</h2>
+            <p>Just checking your player card before we pour the clues.</p>
+          </section>
+        ) : !session?.user ? (
+          <section className="daily-access-card">
+            <Twemoji text="☕" className="daily-access-icon" />
+            <h2>SIGN IN FOR TODAY&apos;S BREW</h2>
+            <p>
+              The Daily Challenge is one cup per player. Log in or create a free
+              account to make your guesses, save your score and continue across
+              devices.
+            </p>
+            <p className="daily-access-promise">
+              MelBurb is completely free to play—with no ads, pop-ups or
+              annoying screens cluttering our café. Just coffee, suburbs and
+              good guesses.
+            </p>
+            <div className="daily-access-actions">
+              <button className="cafe-button" type="button" onClick={onSignIn}>
+                Log in
+              </button>
+              <button
+                className="cafe-button"
+                type="button"
+                onClick={onCreateAccount}
+              >
+                Create free account
+              </button>
+            </div>
+          </section>
+        ) : cloudResultError ? (
+          <section className="daily-access-card" role="alert">
+            <Twemoji text="☕" className="daily-access-icon" />
+            <h2>WE COULDN&apos;T CHECK YOUR TAB</h2>
+            <p>
+              Refresh the page before guessing so we can confirm whether
+              today&apos;s challenge is already complete.
+            </p>
+          </section>
         ) : (
           <>
             <form onSubmit={handleSubmit}>
