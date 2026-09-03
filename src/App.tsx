@@ -10,6 +10,7 @@ import { loadProgress, PlayerProgress } from "./domain/progress";
 import { History } from "./components/panels/History";
 import { Statistics } from "./components/panels/Statistics";
 import Twemoji from "./components/Twemoji";
+import { Invite } from "./components/panels/Invite";
 
 export type GameMode = "daily" | "practice" | "challenge";
 
@@ -24,6 +25,7 @@ export default function App() {
     () => window.location.hash === "#history"
   );
   const [statsOpen, setStatsOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
   const [progress, setProgress] = useState<PlayerProgress>(() =>
     loadProgress()
   );
@@ -99,6 +101,7 @@ export default function App() {
         onViewStats={() => setStatsOpen(true)}
       />
       <Statistics isOpen={statsOpen} close={closeStats} />
+      <Invite isOpen={inviteOpen} close={() => setInviteOpen(false)} />
       <div className="cafe-world flex justify-center flex-auto text-stone-100">
         <div className="w-full flex flex-col cafe-game-shell">
           <div className="cafe-game-content">
@@ -133,6 +136,9 @@ export default function App() {
                 </button>
                 <button type="button" onClick={() => setStatsOpen(true)}>
                   Statistics
+                </button>
+                <button type="button" onClick={() => setInviteOpen(true)}>
+                  Share MelBurb
                 </button>
                 <button type="button" onClick={() => setSettingsOpen(true)}>
                   Settings
