@@ -641,6 +641,81 @@ a:focus-visible {
   color: var(--amber);
 }
 
+.invite-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 8px 24px;
+  text-align: center;
+}
+
+.invite-panel-cup,
+.invite-panel-cup img {
+  width: 64px;
+  height: 64px;
+  font-size: 64px;
+}
+
+.invite-panel h3 {
+  color: var(--crema);
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+}
+
+.invite-panel p {
+  max-width: 540px;
+  color: #cbbeb0;
+}
+
+.invite-panel blockquote {
+  width: 100%;
+  padding: 18px;
+  border: 2px dashed #735144;
+  background: #120d0b;
+  color: var(--crema);
+  line-height: 1.65;
+  text-align: left;
+}
+
+.invite-actions {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.invite-actions button,
+.invite-actions a {
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border: 2px solid #735144;
+  background: #17110e;
+  color: var(--crema);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.invite-actions button:hover,
+.invite-actions button:focus-visible,
+.invite-actions a:hover,
+.invite-actions a:focus-visible {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.invite-panel small {
+  color: var(--sage);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .guess-entry-label {
   align-self: flex-start;
   margin: 0 0 5px 4px;
@@ -1078,7 +1153,7 @@ a:focus-visible {
   }
   .site-menu {
     grid-column: 1 / -1;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 2px;
     padding: 4px;
     border-top: 2px solid #3e281f;
@@ -1089,6 +1164,9 @@ a:focus-visible {
     padding: 4px 2px;
     font-size: 0.55rem;
     line-height: 1.15;
+  }
+  .invite-actions {
+    grid-template-columns: 1fr;
   }
   .game-status strong {
     font-size: 0.7rem;
