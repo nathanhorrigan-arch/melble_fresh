@@ -793,6 +793,48 @@ a:focus-visible {
   color: #111;
 }
 
+.daily-access-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 12px 0;
+  padding: 20px;
+  border: 3px solid #65483f;
+  background: #100c0a;
+  color: var(--crema);
+  text-align: center;
+  box-shadow: 4px 5px 0 #3b251d;
+}
+
+.daily-access-card h2 {
+  color: var(--amber);
+  font-family: "Courier New", monospace;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+}
+
+.daily-access-card p {
+  max-width: 680px;
+}
+
+.daily-access-icon {
+  font-size: 2.4rem;
+}
+
+.daily-access-promise {
+  color: #63b27d;
+  font-weight: 800;
+}
+
+.daily-access-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
 .score-ticket {
   display: flex;
   flex-direction: column;

@@ -80,9 +80,16 @@ interface ProfileProps {
   close: () => void;
   progress: PlayerProgress;
   onChange: (progress: PlayerProgress) => void;
+  initialAuthMode?: "signin" | "signup";
 }
 
-export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
+export function Profile({
+  isOpen,
+  close,
+  progress,
+  onChange,
+  initialAuthMode = "signin",
+}: ProfileProps) {
   const [name, setName] = useState(progress.displayName);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -91,6 +98,10 @@ export function Profile({ isOpen, close, progress, onChange }: ProfileProps) {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const { session, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (isOpen && !session?.user) setAuthMode(initialAuthMode);
+  }, [initialAuthMode, isOpen, session?.user]);
 
   useEffect(() => {
     if (!session?.user) return;

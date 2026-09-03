@@ -15,7 +15,10 @@ export function getDayString(shiftDayCount?: number) {
     .toFormat("yyyy-MM-dd");
 }
 
-export function useTodays(dayString: string): [
+export function useTodays(
+  dayString: string,
+  storageKey = dayString
+): [
   {
     suburb?: Suburb;
     guesses: Guess[];
@@ -38,17 +41,17 @@ export function useTodays(dayString: string): [
       const newGuesses = [...todays.guesses, newGuess];
 
       setTodays((prev) => ({ suburb: prev.suburb, guesses: newGuesses }));
-      saveGuesses(dayString, newGuesses);
+      saveGuesses(storageKey, newGuesses);
     },
-    [dayString, todays]
+    [storageKey, todays]
   );
 
   useEffect(() => {
-    const guesses = loadAllGuesses()[dayString] ?? [];
+    const guesses = loadAllGuesses()[storageKey] ?? [];
     const suburb = getSuburbForDay(dayString);
 
     setTodays({ suburb, guesses });
-  }, [dayString]);
+  }, [dayString, storageKey]);
 
   const randomAngle = useMemo(
     () => seedrandom.alea(dayString)() * 360,

@@ -12,9 +12,13 @@ export interface GameResult {
   solved: boolean;
 }
 
-function getStoredClueCount(gameKey: string): number {
+function getStoredClueCount(userId: string, gameKey: string): number {
   try {
-    const clues = JSON.parse(localStorage.getItem(`clues-${gameKey}`) || "[]");
+    const clues = JSON.parse(
+      localStorage.getItem(`clues-${userId}:${gameKey}`) ||
+        localStorage.getItem(`clues-${gameKey}`) ||
+        "[]"
+    );
     return Array.isArray(clues) ? clues.length : 0;
   } catch {
     return 0;
@@ -98,7 +102,7 @@ export async function synchronizeLocalHistory(
   const local = loadProgress();
   const allGuesses = loadAllGuesses();
   const rows = local.scoredGames.flatMap((gameKey) => {
-    const guesses = allGuesses[gameKey];
+    const guesses = allGuesses[`${userId}:${gameKey}`] || allGuesses[gameKey];
     return guesses?.length
       ? [
           toResultRow(
@@ -106,16 +110,17 @@ export async function synchronizeLocalHistory(
             gameKey,
             modeFromGameKey(gameKey),
             guesses,
-            getStoredClueCount(gameKey)
+            getStoredClueCount(userId, gameKey)
           ),
         ]
       : [];
   });
 
   if (rows.length > 0) {
-    const { error } = await supabase
-      .from("game_results")
-      .upsert(rows, { onConflict: "user_id,game_key" });
+    const { error } = await supabase.from("game_results").upsert(rows, {
+      onConflict: "user_id,game_key",
+      ignoreDuplicates: true,
+    });
     if (error) throw error;
   }
 
@@ -133,10 +138,23 @@ export async function synchronizeCompletedGame(
 
   const { error } = await supabase
     .from("game_results")
-    .upsert(toResultRow(data.user.id, gameKey, mode, guesses, clueCount), {
-      onConflict: "user_id,game_key",
-    });
-  if (error) throw error;
+    .insert(toResultRow(data.user.id, gameKey, mode, guesses, clueCount));
+  if (error && error.code !== "23505") throw error;
 
   return loadCloudProgress(data.user.id, loadProgress().displayName);
+}
+
+export async function loadCompletedGame(
+  userId: string,
+  gameKey: string
+): Promise<GameResult | null> {
+  const { data, error } = await supabase
+    .from("game_results")
+    .select("game_key, mode, score, guesses_count, closest_distance_m, solved")
+    .eq("user_id", userId)
+    .eq("game_key", gameKey)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data;
 }
