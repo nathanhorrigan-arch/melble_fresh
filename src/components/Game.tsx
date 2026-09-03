@@ -411,6 +411,51 @@ export function Game({
                     </small>
                   )}
                 </div>
+                <div className="suburb-revealed-card mt-3">
+                  <div className="suburb-revealed-header">
+                    <span className="suburb-revealed-emoji">☕</span>
+                    <span className="suburb-revealed-title">
+                      Last cup poured — the suburb was
+                    </span>
+                    <strong className="suburb-revealed-name">
+                      {suburbName}!
+                    </strong>
+                  </div>
+                  <div className="suburb-revealed-actions">
+                    <a
+                      className="suburb-revealed-action"
+                      href={`https://www.google.com/maps?q=${suburbName},+VIC&hl=${i18n.resolvedLanguage}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="block text-4xl">🗺️</span>
+                      <span className="text-sm">View {suburbName} on Maps</span>
+                    </a>
+                    <a
+                      className="suburb-revealed-action"
+                      href={`https://${i18n.resolvedLanguage}.wikipedia.org/wiki/${suburbName},_Victoria`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="block text-4xl">📖</span>
+                      <span className="text-sm">Read about {suburbName}</span>
+                    </a>
+                    <a
+                      className="suburb-revealed-action"
+                      href={getBroadsheetSuburbUrl(suburbName)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Twemoji
+                        text="☕"
+                        options={{ className: "block text-4xl" }}
+                      />
+                      <span className="text-sm">
+                        Find cafés in {suburbName}
+                      </span>
+                    </a>
+                  </div>
+                </div>
                 {gameMode === "practice" && (
                   <button
                     type="button"
