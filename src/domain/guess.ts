@@ -6,6 +6,28 @@ export interface Guess {
   direction: Direction;
 }
 
+const MAX_TRY_COUNT = 6;
+
+export function getGuessPlaceholder(guesses: Guess[]): string {
+  if (guesses.length === 0) return "Start your guess here...";
+
+  const distance = guesses[guesses.length - 1].distance;
+  const message =
+    distance <= 1_000
+      ? "Almost there—you could walk it!"
+      : distance <= 3_000
+      ? "Your coffee’s getting warmer!"
+      : distance <= 5_000
+      ? "You’re in the neighbourhood!"
+      : distance <= 15_000
+      ? "Getting warmer—follow the direction clue!"
+      : "Wrong side of the coffee run!";
+  const guessesLeft = MAX_TRY_COUNT - guesses.length;
+  const guessLabel = guessesLeft === 1 ? "guess" : "guesses";
+
+  return `${message} Click here to choose another suburb — ${guessesLeft} ${guessLabel} left.`;
+}
+
 export function getGameScore(guesses: Guess[], clueCount = 0): number {
   const cluePenalty = clueCount * 10;
   if (guesses.some((guess) => guess.distance === 0)) {

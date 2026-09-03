@@ -1,4 +1,9 @@
-import { getGameScore, loadAllGuesses, saveGuesses } from "./guess";
+import {
+  getGameScore,
+  getGuessPlaceholder,
+  loadAllGuesses,
+  saveGuesses,
+} from "./guess";
 
 describe("guess persistence", () => {
   beforeEach(() => localStorage.clear());
@@ -51,5 +56,43 @@ describe("game scoring", () => {
     expect(getGameScore([guess(0)], 2)).toBe(80);
     expect(getGameScore([guess(2_000)], 2)).toBe(30);
     expect(getGameScore([guess(0)], 3)).toBe(70);
+  });
+});
+
+describe("distance-aware guess prompts", () => {
+  const guess = (distance: number) => ({
+    name: "Test suburb",
+    distance,
+    direction: "N" as const,
+  });
+
+  it("starts with a clear invitation to guess", () => {
+    expect(getGuessPlaceholder([])).toBe("Start your guess here...");
+  });
+
+  it.each([
+    [1_000, "Almost there—you could walk it!"],
+    [3_000, "Your coffee’s getting warmer!"],
+    [5_000, "You’re in the neighbourhood!"],
+    [15_000, "Getting warmer—follow the direction clue!"],
+    [15_001, "Wrong side of the coffee run!"],
+  ])("uses the right feedback at %i metres", (distance, message) => {
+    expect(getGuessPlaceholder([guess(distance)])).toBe(
+      `${message} Click here to choose another suburb — 5 guesses left.`
+    );
+  });
+
+  it("uses singular wording for the final remaining guess", () => {
+    expect(
+      getGuessPlaceholder([
+        guess(20_000),
+        guess(20_000),
+        guess(20_000),
+        guess(20_000),
+        guess(2_000),
+      ])
+    ).toBe(
+      "Your coffee’s getting warmer! Click here to choose another suburb — 1 guess left."
+    );
   });
 });

@@ -13,7 +13,7 @@ import { suburbs } from "../domain/suburbs.position";
 import { event } from "../domain/analytics";
 import { bestGuessPercent, dayCount } from "../domain/guessStats";
 import type { GameMode } from "../App";
-import { getGameScore } from "../domain/guess";
+import { getGameScore, getGuessPlaceholder } from "../domain/guess";
 import { PlayerProgress, recordCompletedGame } from "../domain/progress";
 import {
   GameResult,
@@ -23,24 +23,6 @@ import {
 import { useAuth } from "../hooks/useAuth";
 
 const MAX_TRY_COUNT = 6;
-const RETRY_PROMPTS = [
-  "Coffee down. Where next?",
-  "Cafe miss - try again.",
-  "Wrong tram stop.",
-  "Another sip. Where next?",
-  "Last cup - choose wisely!",
-];
-
-function getGuessPlaceholder(guessCount: number) {
-  if (guessCount === 0) return "Start your guess here...";
-
-  const guessesLeft = MAX_TRY_COUNT - guessCount;
-  const prompt =
-    RETRY_PROMPTS[Math.min(guessCount - 1, RETRY_PROMPTS.length - 1)];
-  const guessLabel = guessesLeft === 1 ? "guess" : "guesses";
-  return `${prompt} ${guessesLeft} ${guessLabel} left.`;
-}
-
 interface GameProps {
   settingsData: SettingsData;
   updateSettings: (newSettings: Partial<SettingsData>) => void;
@@ -578,7 +560,7 @@ export function Game({
                   inputRef={suburbInputRef}
                   currentGuess={currentGuess}
                   setCurrentGuess={setCurrentGuess}
-                  placeholder={getGuessPlaceholder(guesses.length)}
+                  placeholder={getGuessPlaceholder(guesses)}
                 />
                 <button
                   className="rounded font-bold p-3 flex items-center justify-center border-2 uppercase my-0.5 w-full bg-amber-500 text-stone-950 hover:bg-amber-400 active:bg-amber-600 border-amber-600 transition-colors text-xl sm:text-2xl"
