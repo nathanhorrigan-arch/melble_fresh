@@ -97,6 +97,7 @@ export function Profile({
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [editingDisplayName, setEditingDisplayName] = useState(false);
   const { session, isLoading } = useAuth();
 
   useEffect(() => {
@@ -215,6 +216,58 @@ export function Profile({
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     setMessage(error ? error.message : "You are signed out.");
+  }
+
+  async function handleDisplayNameChange(event: FormEvent) {
+    event.preventDefault();
+    if (!session?.user) return;
+
+    const trimmedName = name.trim();
+    if (trimmedName.length < 2 || trimmedName.length > 24) {
+      setMessage("Choose a display name between 2 and 24 characters.");
+      return;
+    }
+    if (containsProfanity(trimmedName)) {
+      setMessage("Display name contains inappropriate content.");
+      return;
+    }
+
+    setSubmitting(true);
+    setMessage("");
+
+    if (process.env.NODE_ENV === "development") {
+      onChange(saveDisplayName(trimmedName));
+      setSubmitting(false);
+      setEditingDisplayName(false);
+      setMessage(
+        "Local preview: your new display name is shown on this device only."
+      );
+      return;
+    }
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ display_name: trimmedName })
+      .eq("id", session.user.id);
+
+    setSubmitting(false);
+    if (error) {
+      if (
+        error.code === "23505" ||
+        error.message.includes("Display name is already in use")
+      ) {
+        setMessage(
+          "That display name is already being used. Please choose another."
+        );
+        return;
+      }
+      setMessage("Your display name could not be updated. Please try again.");
+      return;
+    }
+
+    onChange(saveDisplayName(trimmedName));
+    setEditingDisplayName(false);
+    setMessage("Your display name has been updated.");
   }
 
   return (
@@ -369,16 +422,68 @@ export function Profile({
       )}
       {message && <p className="account-message mb-4">{message}</p>}
       {progress.displayName && session?.user && (
-        <div className="mb-4">
-          <label className="block font-bold mb-1">Display name</label>
-          <div className="flex items-center gap-2 rounded border-2 border-stone-500 bg-stone-800 p-2">
-            <span className="text-amber-400">🔒</span>
-            <span className="flex-1">{progress.displayName}</span>
+        <section className="display-name-card mb-4">
+          <div className="display-name-heading">
+            <div>
+              <span>Display name</span>
+              <strong>{progress.displayName}</strong>
+            </div>
+            {!editingDisplayName && (
+              <button
+                className="cafe-button"
+                type="button"
+                onClick={() => {
+                  setName(progress.displayName);
+                  setMessage("");
+                  setEditingDisplayName(true);
+                }}
+              >
+                Edit name
+              </button>
+            )}
           </div>
-          <p className="text-xs opacity-60 mt-1">
-            Display name is locked to your account.
+          <p>
+            This is the name shown on your player card and future public game
+            features. Display names must be unique; your email and login stay
+            the same.
           </p>
-        </div>
+          {editingDisplayName && (
+            <form onSubmit={handleDisplayNameChange}>
+              <label htmlFor="edit-display-name">New display name</label>
+              <input
+                id="edit-display-name"
+                type="text"
+                autoComplete="nickname"
+                minLength={2}
+                maxLength={24}
+                required
+                autoFocus
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+              />
+              <small>{name.trim().length}/24 characters</small>
+              <div className="display-name-actions">
+                <button
+                  className="cafe-button"
+                  type="submit"
+                  disabled={submitting}
+                >
+                  {submitting ? "Saving…" : "Save display name"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setName(progress.displayName);
+                    setEditingDisplayName(false);
+                    setMessage("");
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
+        </section>
       )}
     </Panel>
   );
