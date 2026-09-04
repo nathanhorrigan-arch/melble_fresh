@@ -32,7 +32,7 @@ serve(async (req) => {
     // Get all game results
     const { data: results, error: resultsError } = await supabaseAdmin
       .from("game_results")
-      .select("user_id, mode, score, guesses_count, solved, closest_distance_m");
+      .select("user_id, mode, score, guesses_count, solved, closest_distance_m, played_at");
 
     if (resultsError) throw resultsError;
 
@@ -95,6 +95,7 @@ serve(async (req) => {
       let maxStreak = 0;
       let totalGuesses = 0;
       let solvedForAvg = 0;
+      let lastSolvedDateStr = "";
 
       for (const result of sortedResults) {
         stats.totalGames++;
@@ -115,10 +116,25 @@ serve(async (req) => {
           }
         }
 
-        // Calculate streaks for daily games only
+        // Calculate streaks for daily games only (calendar-day based)
         if (result.mode === "daily") {
           if (result.solved) {
-            currentStreak++;
+            const resultDate = new Date(result.played_at);
+            const resultStr = resultDate.toISOString().split("T")[0];
+            if (lastSolvedDateStr) {
+              const lastDate = new Date(lastSolvedDateStr + "T00:00:00Z");
+              const diffDays = Math.round(
+                (resultDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24)
+              );
+              if (diffDays === 1) {
+                currentStreak++;
+              } else {
+                currentStreak = 1;
+              }
+            } else {
+              currentStreak = 1;
+            }
+            lastSolvedDateStr = resultStr;
             maxStreak = Math.max(maxStreak, currentStreak);
           } else {
             currentStreak = 0;
