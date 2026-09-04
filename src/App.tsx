@@ -134,7 +134,7 @@ export default function App() {
                     setProfileOpen(true);
                   }}
                 >
-                  {session ? "My account" : "Login / Register"}
+                  {"My account"}
                 </button>
                 <button type="button" onClick={() => setStatsOpen(true)}>
                   Statistics
