@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Infos } from "./components/panels/Infos";
 import { Settings } from "./components/panels/Settings";
 import { useSettings } from "./hooks/useSettings";
+import { useAuth } from "./hooks/useAuth";
 import { Profile } from "./components/panels/Profile";
 import { loadProgress, PlayerProgress } from "./domain/progress";
 import { History } from "./components/panels/History";
@@ -15,6 +16,7 @@ import { Invite } from "./components/panels/Invite";
 export type GameMode = "daily" | "practice" | "challenge";
 
 export default function App() {
+  const { session } = useAuth();
   const [infoOpen, setInfoOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -132,7 +134,7 @@ export default function App() {
                     setProfileOpen(true);
                   }}
                 >
-                  Login / Register
+                  {session ? "My account" : "Login / Register"}
                 </button>
                 <button type="button" onClick={() => setStatsOpen(true)}>
                   Statistics
