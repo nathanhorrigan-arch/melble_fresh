@@ -131,16 +131,38 @@ export function Game({
     setCloudResult(null);
     setCloudResultLoading(true);
     setCloudResultError(false);
-    loadCompletedGame(session.user.id, dayString)
-      .then((result) => {
-        if (active) setCloudResult(result);
-      })
-      .catch(() => {
-        if (active) setCloudResultError(true);
-      })
-      .finally(() => {
-        if (active) setCloudResultLoading(false);
-      });
+    const refreshKey = `melburb-daily-check-refresh-${session.user.id}-${dayString}`;
+
+    const checkDailyStatus = async () => {
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        try {
+          const result = await loadCompletedGame(session.user.id, dayString);
+          if (!active) return;
+          window.sessionStorage.removeItem(refreshKey);
+          setCloudResult(result);
+          setCloudResultLoading(false);
+          return;
+        } catch {
+          if (attempt < 2) {
+            await new Promise((resolve) =>
+              window.setTimeout(resolve, 500 * (attempt + 1))
+            );
+          }
+        }
+      }
+
+      if (!active) return;
+      if (window.sessionStorage.getItem(refreshKey) !== "attempted") {
+        window.sessionStorage.setItem(refreshKey, "attempted");
+        window.location.reload();
+        return;
+      }
+
+      setCloudResultError(true);
+      setCloudResultLoading(false);
+    };
+
+    checkDailyStatus();
 
     return () => {
       active = false;
@@ -548,9 +570,16 @@ export function Game({
             <Twemoji text="☕" className="daily-access-icon" />
             <h2>WE COULDN&apos;T CHECK YOUR TAB</h2>
             <p>
-              Refresh the page before guessing so we can confirm whether
-              today&apos;s challenge is already complete.
+              We retried automatically, but the café still cannot reach your
+              player card. Check your connection and try again.
             </p>
+            <button
+              className="cafe-button"
+              type="button"
+              onClick={() => window.location.reload()}
+            >
+              Try again
+            </button>
           </section>
         ) : (
           <>
