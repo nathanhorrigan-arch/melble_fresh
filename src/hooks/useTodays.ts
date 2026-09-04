@@ -8,11 +8,30 @@ import { Guess, loadAllGuesses, saveGuesses } from "../domain/guess";
 const forcedSuburbs: Record<string, SuburbCode> = {};
 
 const noRepeatStartDate = DateTime.fromFormat("2022-05-01", "yyyy-MM-dd");
+export const MELBOURNE_TIME_ZONE = "Australia/Melbourne";
+export const NEW_GAME_REFRESH_DELAY_MS = 5000;
 
-export function getDayString(shiftDayCount?: number) {
-  return DateTime.now()
+export function getDayString(
+  shiftDayCount?: number,
+  now: DateTime = DateTime.now()
+) {
+  return now
+    .setZone(MELBOURNE_TIME_ZONE)
     .plus({ days: shiftDayCount ?? 0 })
     .toFormat("yyyy-MM-dd");
+}
+
+export function millisecondsUntilNextGame(
+  now: DateTime = DateTime.now(),
+  refreshDelayMs = NEW_GAME_REFRESH_DELAY_MS
+) {
+  const melbourneNow = now.setZone(MELBOURNE_TIME_ZONE);
+  const nextGameAt = melbourneNow
+    .plus({ days: 1 })
+    .startOf("day")
+    .plus({ milliseconds: refreshDelayMs });
+
+  return Math.max(0, nextGameAt.diff(melbourneNow).as("milliseconds"));
 }
 
 export function useTodays(
