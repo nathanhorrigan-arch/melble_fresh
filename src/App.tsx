@@ -12,6 +12,7 @@ import { History } from "./components/panels/History";
 import { Statistics } from "./components/panels/Statistics";
 import Twemoji from "./components/Twemoji";
 import { Invite } from "./components/panels/Invite";
+import { useDailyGameRefresh } from "./hooks/useDailyGameRefresh";
 
 export type GameMode = "daily" | "practice" | "challenge";
 
@@ -35,6 +36,7 @@ export default function App() {
     "challenge"
   );
   const gameMode: GameMode = challengeSeed ? "challenge" : "daily";
+  useDailyGameRefresh(gameMode === "daily");
   const [practiceRound, setPracticeRound] = useState(() =>
     Number(localStorage.getItem("melble-practice-round") || "1")
   );
