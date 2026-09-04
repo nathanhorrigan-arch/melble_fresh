@@ -592,7 +592,7 @@ export function Game({
                   placeholder={getGuessPlaceholder(guesses)}
                 />
                 <button
-                  className="rounded font-bold p-3 flex items-center justify-center border-2 uppercase my-0.5 w-full bg-amber-500 text-stone-950 hover:bg-amber-400 active:bg-amber-600 border-amber-600 transition-colors text-xl sm:text-2xl"
+                  className="rounded font-bold p-3 flex items-center justify-center border-2 uppercase my-0.5 w-full bg-amber-500 text-black hover:bg-amber-400 active:bg-amber-600 border-amber-600 transition-colors text-xl sm:text-2xl"
                   type="submit"
                 >
                   <Twemoji
