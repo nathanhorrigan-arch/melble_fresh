@@ -34,12 +34,12 @@ production website, and publishes it automatically. GitHub Pages must use
 ## Gameplay
 
 - **Daily** gives every player the same suburb each day.
-- **Practice** offers repeatable games that do not replace the daily puzzle.
-- Correct answers score 100 points. Unsolved games score 75 points within one
+- **Daily Challenge** is the only exposed mode; one shared suburb per Melbourne calendar day.
+- Correct answers score 100 points. Unsolved games score 75 within one
   kilometre, 50 within three kilometres, or 25 within five kilometres.
 - Barista clues cost 10 points each.
-- Player names, points, close calls, and achievements are currently stored on
-  the player's device.
+- Player names, points, history and achievements sync to Supabase through
+  email/password accounts; progress is shared across devices.
 
 Secure accounts and cross-device progress require a hosted authentication and
 database service. The local player-progress model is intentionally separated so
