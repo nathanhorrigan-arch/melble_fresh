@@ -14,18 +14,18 @@ export function getGuessPlaceholder(guesses: Guess[]): string {
   const distance = guesses[guesses.length - 1].distance;
   const message =
     distance <= 1_000
-      ? "Almost there—you could walk it!"
+      ? "So close!"
       : distance <= 3_000
-      ? "Your coffee’s getting warmer!"
+      ? "Warmer coffee!"
       : distance <= 5_000
-      ? "You’re in the neighbourhood!"
+      ? "You’re nearby!"
       : distance <= 15_000
-      ? "Getting warmer—follow the direction clue!"
-      : "Wrong side of the coffee run!";
+      ? "Follow arrow!"
+      : "Keep exploring!";
   const guessesLeft = MAX_TRY_COUNT - guesses.length;
   const guessLabel = guessesLeft === 1 ? "guess" : "guesses";
 
-  return `${message} Click here to choose another suburb — ${guessesLeft} ${guessLabel} left.`;
+  return `${message} Click here — ${guessesLeft} ${guessLabel} left.`;
 }
 
 export function getGameScore(guesses: Guess[], clueCount = 0): number {

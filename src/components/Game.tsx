@@ -23,6 +23,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 
 const MAX_TRY_COUNT = 6;
+const ALLOW_LOCAL_GUEST_PLAY = process.env.NODE_ENV === "development";
 interface GameProps {
   settingsData: SettingsData;
   updateSettings: (newSettings: Partial<SettingsData>) => void;
@@ -231,7 +232,12 @@ export function Game({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!session?.user || checkingDailyStatus || cloudResultError) return;
+    if (
+      (!session?.user && !ALLOW_LOCAL_GUEST_PLAY) ||
+      checkingDailyStatus ||
+      cloudResultError
+    )
+      return;
     if (suburb == null) {
       return;
     }
@@ -538,7 +544,7 @@ export function Game({
             <h2>CHECKING TODAY&apos;S BREW</h2>
             <p>Just checking your player card before we pour the clues.</p>
           </section>
-        ) : !session?.user ? (
+        ) : !session?.user && !ALLOW_LOCAL_GUEST_PLAY ? (
           <section className="daily-access-card">
             <Twemoji text="☕" className="daily-access-icon" />
             <h2>SIGN IN FOR TODAY&apos;S BREW</h2>
