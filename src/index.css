@@ -749,9 +749,9 @@ a:focus-visible {
 
 .guess-entry-input {
   min-height: 64px;
-  font-size: clamp(0.8rem, 1.8vw, 1.15rem);
+  font-size: clamp(0.7rem, 2.2vw, 1.15rem);
   font-weight: 800;
-  letter-spacing: 0.015em;
+  letter-spacing: 0;
   background: #080605;
   color: var(--crema);
   width: 100%;
@@ -1088,6 +1088,13 @@ a:focus-visible {
   background: #070606;
   color: #f8e2b8;
   padding: 0.7rem;
+}
+
+.account-field-help {
+  margin-top: -0.3rem;
+  color: #b8ada2;
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
 
 .account-tabs {

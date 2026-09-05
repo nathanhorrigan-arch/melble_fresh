@@ -71,14 +71,14 @@ describe("distance-aware guess prompts", () => {
   });
 
   it.each([
-    [1_000, "Almost there—you could walk it!"],
-    [3_000, "Your coffee’s getting warmer!"],
-    [5_000, "You’re in the neighbourhood!"],
-    [15_000, "Getting warmer—follow the direction clue!"],
-    [15_001, "Wrong side of the coffee run!"],
+    [1_000, "So close!"],
+    [3_000, "Warmer coffee!"],
+    [5_000, "You’re nearby!"],
+    [15_000, "Follow arrow!"],
+    [15_001, "Keep exploring!"],
   ])("uses the right feedback at %i metres", (distance, message) => {
     expect(getGuessPlaceholder([guess(distance)])).toBe(
-      `${message} Click here to choose another suburb — 5 guesses left.`
+      `${message} Click here — 5 guesses left.`
     );
   });
 
@@ -92,7 +92,15 @@ describe("distance-aware guess prompts", () => {
         guess(2_000),
       ])
     ).toBe(
-      "Your coffee’s getting warmer! Click here to choose another suburb — 1 guess left."
+      "Warmer coffee! Click here — 1 guess left."
     );
+  });
+
+  it("keeps every wrong-guess message short enough for the input", () => {
+    [1_000, 3_000, 5_000, 15_000, 15_001].forEach((distance) => {
+      expect(getGuessPlaceholder([guess(distance)]).length).toBeLessThanOrEqual(
+        45
+      );
+    });
   });
 });

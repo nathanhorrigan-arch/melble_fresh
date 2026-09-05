@@ -75,6 +75,12 @@ function containsProfanity(text: string): boolean {
   return BLOCKED_TERMS.some((term) => lower.includes(term));
 }
 
+function isReservedDisplayName(text: string): boolean {
+  return ["café guest", "cafe guest", "melburb player"].includes(
+    text.trim().toLocaleLowerCase()
+  );
+}
+
 interface ProfileProps {
   isOpen: boolean;
   close: () => void;
@@ -101,8 +107,13 @@ export function Profile({
   const { session, isLoading } = useAuth();
 
   useEffect(() => {
-    if (isOpen && !session?.user) setAuthMode(initialAuthMode);
-  }, [initialAuthMode, isOpen, session?.user]);
+    if (isOpen && !session?.user) {
+      setAuthMode(initialAuthMode);
+      if (initialAuthMode === "signup" && isReservedDisplayName(name)) {
+        setName("");
+      }
+    }
+  }, [initialAuthMode, isOpen, name, session?.user]);
 
   useEffect(() => {
     if (!session?.user) return;
@@ -138,15 +149,25 @@ export function Profile({
     setMessage("");
 
     const trimmedName = name.trim();
-    if (
-      authMode === "signup" &&
-      trimmedName &&
-      containsProfanity(trimmedName)
-    ) {
-      setSubmitting(false);
-      setMessage("Display name contains inappropriate content.");
-      setName("");
-      return;
+    if (authMode === "signup") {
+      if (trimmedName.length < 2 || trimmedName.length > 24) {
+        setSubmitting(false);
+        setMessage("Choose a display name between 2 and 24 characters.");
+        return;
+      }
+      if (isReservedDisplayName(trimmedName)) {
+        setSubmitting(false);
+        setMessage(
+          "Please choose your own display name instead of Café Guest."
+        );
+        return;
+      }
+      if (containsProfanity(trimmedName)) {
+        setSubmitting(false);
+        setMessage("Display name contains inappropriate content.");
+        setName("");
+        return;
+      }
     }
 
     const result =
@@ -155,7 +176,7 @@ export function Profile({
             email,
             password,
             options: {
-              data: { display_name: trimmedName || "MelBurb Player" },
+              data: { display_name: trimmedName },
               emailRedirectTo: "https://www.melburb.com/",
             },
           })
@@ -225,6 +246,10 @@ export function Profile({
     const trimmedName = name.trim();
     if (trimmedName.length < 2 || trimmedName.length > 24) {
       setMessage("Choose a display name between 2 and 24 characters.");
+      return;
+    }
+    if (isReservedDisplayName(trimmedName)) {
+      setMessage("Please choose your own display name instead of Café Guest.");
       return;
     }
     if (containsProfanity(trimmedName)) {
@@ -297,7 +322,10 @@ export function Profile({
               <button
                 className={authMode === "signup" ? "active" : ""}
                 type="button"
-                onClick={() => setAuthMode("signup")}
+                onClick={() => {
+                  setAuthMode("signup");
+                  if (isReservedDisplayName(name)) setName("");
+                }}
               >
                 Create account
               </button>
@@ -329,25 +357,26 @@ export function Profile({
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
               />
-              {authMode === "signup" &&
-                (progress.displayName === "Café Guest" ||
-                  !progress.displayName) && (
-                  <>
-                    <label htmlFor="display-name">
-                      Please create a display name
-                    </label>
-                    <input
-                      id="display-name"
-                      type="text"
-                      autoComplete="nickname"
-                      maxLength={24}
-                      required
-                      value={name}
-                      onChange={(event) => setName(event.target.value)}
-                      placeholder="Your visible player name"
-                    />
-                  </>
-                )}
+              {authMode === "signup" && (
+                <>
+                  <label htmlFor="display-name">Choose your display name</label>
+                  <input
+                    id="display-name"
+                    type="text"
+                    autoComplete="nickname"
+                    minLength={2}
+                    maxLength={24}
+                    required
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Your visible player name"
+                  />
+                  <small className="account-field-help">
+                    Required, unique and shown publicly. Café Guest cannot be
+                    selected.
+                  </small>
+                </>
+              )}
               <button
                 className="cafe-button w-full mt-4"
                 type="submit"
